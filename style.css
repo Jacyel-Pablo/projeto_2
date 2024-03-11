@@ -1,0 +1,180 @@
+*{
+    margin: 0px 0px;
+    padding: 0px 0px;
+    box-sizing: border-box;
+}
+body{
+    background-color: black;
+    display: flex;
+    align-content: center;
+}
+
+/* Menu da pagina */
+.menu{
+    display: flex;
+    align-items: center;
+    background-color: rgb(201, 35, 35);
+    position: fixed;
+    margin-top: -10em;
+    margin-left: -20.25%;
+    width: 100%;
+}
+.logo__cinetime{
+    color: white;
+    font-size: 3em;
+    margin: 0em 0.5em;
+}
+.campo__busca{
+    height: 3em;
+    width: 23em;
+    padding-left: 1em;
+    margin-left: 40%;
+    border-radius: 1.5em;
+    background-color: rgb(59, 59, 59);
+    color: white;
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+}
+.perfil{
+    background-color: aqua;
+    border-radius: 2em;
+    height: 3em;
+    width: 3em;
+    margin-left: 1em;
+}
+
+/* Corpo da pagína index.html */
+.corpo{
+    height: 40.8em;
+    position: relative;
+
+}
+.lancamento{
+    margin-top: 4em;
+    font-size: 1.8em;
+    margin-left: 19vw;
+    color: white;
+    position: absolute;
+}
+.secoes{
+    height: 14em;
+    width: 60vw;
+    margin-top: 10em;
+    margin-left: 20vw;
+    position: absolute;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+/* filmes em lançamentos */
+.filmes{
+    height: 100%;
+}
+.posters{
+    border: 2px solid;
+    height: 82%;
+    width: 71%;
+    margin-left: 14.5%;
+}
+.nome__filme1{
+    color: blue;
+    text-align: center;
+}
+
+.estrela{
+    height: 10%;
+    width: 10%;
+    margin-left: 22%;
+}
+.star{
+    height: 6vh;
+    width: 4vw;
+    position: fixed;
+    margin-top: 90vh;
+    margin-left: 5vw;
+}
+.avaliacao{
+    display: inline-block;
+    position: relative;
+    top: -0.5em;
+    color: white;
+}
+.titulo1{
+    color: red;
+}
+.titulo2{
+    color: yellow;
+}
+.titulo3{
+    color: rgb(1, 214, 1);
+}
+.calendario{
+    margin-top: 40vh;
+    margin-left: 0vw;
+    font-size: 1.8em;
+}
+iframe{
+    margin-top: 13vh;
+    margin-left: -17vw;
+    
+    height: 60.5em;
+    width: 64vw;
+}
+a{
+    color: black;
+}
+
+/* Corpo da pagína dados__filme*/
+
+.menu1{
+    margin-top: 0em;
+    margin-left: 0%;
+}
+.corpo1{
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+}
+.parte1{
+    height: 40.8em;
+}
+.poster{
+    margin-top: 9em;
+    margin-left: 5%;
+    border-color: white;
+    border: 2px solid;
+    position: fixed;
+    width: 22vw;
+    height: 60vh;
+}
+.sinopse{
+    position: fixed;
+    margin-top: 9em;
+    margin-left: 30vw;
+    height: 25em;
+    width: 30%;
+}
+.sinopse1{
+    position: fixed;
+    color: white;
+}
+.sinopse__txt{
+    position: fixed;
+    color: white;
+    margin-top: 2em;
+    font-size: 1.3em;
+}
+
+.nome__filme{
+    position: fixed;
+    color: white;
+    margin-top: 85vh;
+    margin-left: 6vw;
+}
+.avaliacao__filme{
+    margin-top: 91vh;
+    margin-left: 10vw;
+    font-size: 150%;
+    color: white;
+}
