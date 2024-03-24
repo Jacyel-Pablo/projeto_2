@@ -1,0 +1,87 @@
+*{
+    box-sizing: border-box;
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+body{
+    background-color: black;
+}
+.text__bg{
+    color: white;
+}
+.box1{
+    width: 35%;
+    position: fixed;
+    height: 100vh;
+    /* background-color: aqua; */
+    border-right: 2px solid;
+    border-color: grey;
+    margin-top: -1.68em;
+}
+.seta{
+    width: 3em;
+    margin: 1em 1em;
+}
+.perfill{
+    background-color: aqua;
+    border-radius: 15em;
+    margin: 0.2em 5%;
+    height: 50vh;
+    width: 25%;
+    position: fixed;
+    text-align: center;
+}
+.nome__config{
+    margin-top: 53vh;
+    text-align: center;
+}
+.user__name{
+    display: inline;
+}
+.lapis{
+    color: aqua;
+    height: 2em;
+    width: 2em
+}
+
+/* Box 2 */
+.box2{
+    width: 65%;
+    margin-left: 35%;
+    position: relative;
+}
+.biografia{
+    margin-top: 3%;
+    margin-left: 2.5em;
+}
+.bio__txt{
+    margin-top: 2em;
+    margin-left: 3em;
+    width: 40em;
+    font-size: 120%;
+}
+
+/* Favoritos */
+.caixa__favoritos{
+    height: 20vh;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 15% 85%;
+}
+.container1{
+    display: flex;
+    justify-content: center;
+}
+.capa{
+    height: 5em;
+    width: 4em;
+}
+.nome__filme{
+    font-size: 120%;
+}
+.love__link{
+    height: 20vh;
+    width: 40em;
+    color: black;
+    text-decoration: none;
+}

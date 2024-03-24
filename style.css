@@ -36,12 +36,19 @@ body{
     border: 0 none;
     outline: 0;
 }
+.perfil_link{
+    background-color: green;
+    /* height: 3em; */
+    width: 3em;
+    margin-left: 1em;
+    margin-top: -3em;
+}
 .perfil{
     background-color: aqua;
     border-radius: 2em;
+    position: fixed;
     height: 3em;
     width: 3em;
-    margin-left: 1em;
 }
 
 /* Corpo da pagína index.html */
@@ -123,58 +130,4 @@ iframe{
 }
 a{
     color: black;
-}
-
-/* Corpo da pagína dados__filme*/
-
-.menu1{
-    margin-top: 0em;
-    margin-left: 0%;
-}
-.corpo1{
-    height: 100vh;
-    width: 100vw;
-    display: grid;
-}
-.parte1{
-    height: 40.8em;
-}
-.poster{
-    margin-top: 9em;
-    margin-left: 5%;
-    border-color: white;
-    border: 2px solid;
-    position: fixed;
-    width: 22vw;
-    height: 60vh;
-}
-.sinopse{
-    position: fixed;
-    margin-top: 9em;
-    margin-left: 30vw;
-    height: 25em;
-    width: 30%;
-}
-.sinopse1{
-    position: fixed;
-    color: white;
-}
-.sinopse__txt{
-    position: fixed;
-    color: white;
-    margin-top: 2em;
-    font-size: 1.3em;
-}
-
-.nome__filme{
-    position: fixed;
-    color: white;
-    margin-top: 85vh;
-    margin-left: 6vw;
-}
-.avaliacao__filme{
-    margin-top: 91vh;
-    margin-left: 10vw;
-    font-size: 150%;
-    color: white;
 }

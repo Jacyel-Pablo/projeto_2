@@ -23,6 +23,7 @@ function lancamento() {
     const dados = fetch('dados.json').then(dados => dados.json()).then(dados => {
 
         for (let i = 0; i < 4; i++) {
+            console.log(dados["filme4"][0])
             document.getElementById('imagem' + (i + 1).toString()).setAttribute('src', dados['filme' + (i + 1).toString()][0])
             document.getElementById('nome' + (i + 1).toString()).innerHTML = dados['filme' + (i + 1).toString()][1]
             document.getElementById('star' + (i + 1).toString()).setAttribute('src', dados['filme' + (i + 1).toString()][2])
