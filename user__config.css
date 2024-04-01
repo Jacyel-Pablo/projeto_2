@@ -4,6 +4,9 @@
     padding: 0px 0px;
 }
 body{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: auto;
     background-color: black;
 }
 .text__bg{
@@ -11,12 +14,12 @@ body{
 }
 .box1{
     width: 35%;
-    position: fixed;
+    min-width: 450px;
+    /* position: fixed; */
     height: 100vh;
     /* background-color: aqua; */
     border-right: 2px solid;
     border-color: grey;
-    margin-top: -1.68em;
 }
 .seta{
     width: 3em;
@@ -27,12 +30,12 @@ body{
     border-radius: 15em;
     margin: 0.2em 5%;
     height: 50vh;
-    width: 25%;
-    position: fixed;
-    text-align: center;
+    min-height: 320px;
+    width: 70%;
+    object-fit: cover;
+    min-width: 330px;
 }
 .nome__config{
-    margin-top: 53vh;
     text-align: center;
 }
 .user__name{
@@ -47,8 +50,8 @@ body{
 /* Box 2 */
 .box2{
     width: 65%;
-    margin-left: 35%;
-    position: relative;
+    height: 100dvh;
+    overflow-y: auto;
 }
 .biografia{
     margin-top: 3%;

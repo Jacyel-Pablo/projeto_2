@@ -34,7 +34,7 @@ function lancamento() {
 }
 
 function dados_filme() {
-    fetch('dados.json').then(dados => dados.json()).then(dados => {
+    fetch('/dados.json').then(dados => dados.json()).then(dados => {
         const nome_filme = localStorage.getItem('filme')
 
         const poster = document.getElementById('poster')
