@@ -1,0 +1,57 @@
+/* Corpo da pagína dados__filme*/
+.menu1{
+    margin-top: 0em;
+    margin-left: 0%;
+}
+.parte1{
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 30% 68%;
+    text-align: left;
+}
+.foto{
+    text-align: center;
+}
+.poster{
+    margin-top: 9em;
+    border-color: white;
+    border: 2px solid;
+    width: 22vw;
+    height: 60vh;
+}
+.avalicao{
+    text-align: left;
+    display: flex;
+}
+.sinopse{
+    text-align: justify;
+    margin-top: 9em;
+    height: 25em;
+    width: 100%;
+}
+.estrela1{
+    height: 35px;
+    width: 35px;
+    /* margin-top: 90vh; */
+    margin-left: 3.5vw;
+}
+.sinopse1{
+    color: white;
+}
+.sinopse__txt{
+    color: white;
+    margin-top: 2em;
+    font-size: 1.3em;
+}
+
+.nome__filme{
+    color: white;
+    margin-left: 4vw;
+}
+.avaliacao__filme{
+    margin-top: 1vh;
+    margin-left: 1vw;
+    font-size: 150%;
+    color: white;
+}
