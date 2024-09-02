@@ -1,20 +1,20 @@
 "use strict";
-const filme1 = document.getElementsByTagName('a');
-if (filme1 != null) {
-    for (let i = 0; i < filme1.length; i++) {
-        filme1[i].addEventListener('click', () => {
-            let name__filme = filme1[i].id;
-            console.log(filme1[i].id);
-            if (name__filme.split(" ").length > 1) {
-                name__filme = name__filme.split(" ");
-                localStorage.setItem('filme', name__filme[1]);
-            }
-            else {
-                localStorage.setItem('filme', name__filme);
-            }
-        });
-    }
-}
+// const filme1 = document.getElementsByTagName('a');
+// if (filme1 != null) {
+//     for (let i = 0; i < filme1.length; i++) {
+//         filme1[i].addEventListener('click', () => {
+//             let name__filme = filme1[i].id;
+//             console.log(filme1[i].id);
+//             if (name__filme.split(" ").length > 1) {
+//                 name__filme = name__filme.split(" ");
+//                 localStorage.setItem('filme', name__filme[1]);
+//             }
+//             else {
+//                 localStorage.setItem('filme', name__filme);
+//             }
+//         });
+//     }
+// }
 function lancamento() {
     const dados = fetch('/Dados_menu').then(dados => dados.json()).then(dados => {
         for (let i = 0; i < 4; i++) {

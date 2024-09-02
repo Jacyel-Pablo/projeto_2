@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import conectar from "./migration.js"
 
 // Indo para pasta principal
 let path1 = process.cwd().split("\\")
@@ -30,9 +31,15 @@ app.use(
     })
   );
 
+// Banco online
+
+app.get("/migration", (request, response) => {
+    response.sendFile(path + "/Banco/migration.js")
+})
+
 // Pagína index.html
 
-app.get("/index.html", (request, response) => {
+app.get("/", (request, response) => {
     response.sendFile(path + "/index.html")
 })
 
@@ -44,6 +51,10 @@ app.get("/index.html/index.css", (request, response) => {
 
 app.get("/criar_conta.html", (request, response) => {
     response.sendFile(path + "/pagínas/criar conta.html")
+})
+
+app.get("/criar_conta.js", async (request, response) => {
+    response.sendFile(path + "/Banco/codigo_criar_conta.js")
 })
 
 // Pagína menu.html
@@ -80,10 +91,25 @@ app.get("/user__config.html/user__config.css", (request, response) => {
 // Pagína dados__filme.html
 app.get("/dados__filme.html", (request, response) => {
     response.sendFile(path + "/pagínas/dados__filme.html")
+    
+    async function mostrar_table() {
+        const banco = await conectar()
+
+        let sql = `SELECT *
+        FROM filmes`
+    
+        console.log(await banco.all(sql))
+    }
+
+    mostrar_table()
 })
 
 app.get("/dados__filme.html/dados__filme.css", (request, response) => {
     response.sendFile(path + "/css/dados__filme.css")
+})
+
+app.get("/migration", (request, response) => {
+    response.sendFile(path + "Banco/migration.js")
 })
 
 // Assets
