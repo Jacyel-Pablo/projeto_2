@@ -31,85 +31,60 @@ app.use(
     })
   );
 
-// Banco online
-
-app.get("/migration", (request, response) => {
-    response.sendFile(path + "/Banco/migration.js")
-})
-
 // Pagína index.html
 
 app.get("/", (request, response) => {
-    response.sendFile(path + "/index.html")
+    response.sendFile(path + "/public/index.html")
 })
 
 app.get("/index.html/index.css", (request, response) => {
-    response.sendFile(path + "/css/index.css")
+    response.sendFile(path + "/public/css/index.css")
 })
 
 // Pagína criar conta.html
 
 app.get("/criar_conta.html", (request, response) => {
-    response.sendFile(path + "/pagínas/criar conta.html")
-})
-
-app.get("/criar_conta.js", async (request, response) => {
-    response.sendFile(path + "/Banco/codigo_criar_conta.js")
+    response.sendFile(path + "/public/pagínas/criar conta.html")
 })
 
 // Pagína menu.html
 
 app.get("/menu.html", (request, response) => {
-    response.sendFile(path + "/pagínas/menu.html")
+    response.sendFile(path + "/public/pagínas/menu.html")
 })
 
 app.get("/menu.css", (request, response) => {
-    response.sendFile(path + "/css/menu.css")
+    response.sendFile(path + "/public/css/menu.css")
 })
 
 app.get("/script.js", (request, response) => {
-    response.sendFile(path + "/codigos/codigo_js/script.js")
+    response.sendFile(path + "/src/codigo_js/script.js")
 })
 
 app.get("/Calendario.html", (request, response) => {
-    response.sendFile(path + "/calendario/Calendário.html")
+    response.sendFile(path + "/public/calendario/Calendário.html")
 })
 
 app.get("/sheet.css", (request, response) => {
-    response.sendFile(path + "/calendario/resources/sheet.css")
+    response.sendFile(path + "/public/calendario/resources/sheet.css")
 })
 
 // Pagína user__config.html
 app.get("/user__config.html", (request, response) => {
-    response.sendFile(path + "/pagínas/user__config.html")
+    response.sendFile(path + "/public/pagínas/user__config.html")
 })
 
 app.get("/user__config.html/user__config.css", (request, response) => {
-    response.sendFile(path + "/css/user__config.css")
+    response.sendFile(path + "/public/css/user__config.css")
 })
 
 // Pagína dados__filme.html
 app.get("/dados__filme.html", (request, response) => {
-    response.sendFile(path + "/pagínas/dados__filme.html")
-    
-    async function mostrar_table() {
-        const banco = await conectar()
-
-        let sql = `SELECT *
-        FROM filmes`
-    
-        console.log(await banco.all(sql))
-    }
-
-    mostrar_table()
+    response.sendFile(path + "/public/pagínas/dados__filme.html")
 })
 
 app.get("/dados__filme.html/dados__filme.css", (request, response) => {
-    response.sendFile(path + "/css/dados__filme.css")
-})
-
-app.get("/migration", (request, response) => {
-    response.sendFile(path + "Banco/migration.js")
+    response.sendFile(path + "/public/css/dados__filme.css")
 })
 
 // Assets
@@ -117,20 +92,20 @@ app.get("/migration", (request, response) => {
 // imagem Seta voltar.png
 
 app.get("/Seta_voltar.png", (request, response) => {
-    response.sendFile(path + "/Resources/user__config/Seta voltar.png")
+    response.sendFile(path + "/public/Resources/user__config/Seta voltar.png")
 })
 
 // Estrelas 
 app.get("/full.png", (request, response) => {
-    response.sendFile(path + "/Resources/full.png")
+    response.sendFile(path + "/public/Resources/full.png")
 })
 
 app.get("/meia.png", (request, response) => {
-    response.sendFile(path + "/Resources/meia.png")
+    response.sendFile(path + "/public/Resources/meia.png")
 })
 
 app.get("/zero.png", (request, response) => {
-    response.sendFile(path + "/Resources/zero.png")
+    response.sendFile(path + "/public/Resources/zero.png")
 })
 
 // Dados da parte menu
@@ -160,7 +135,7 @@ app.get("/Dados_dados_filme", (request, response) => {
 // Pagína de erro
 
 app.use((request, response) => {
-    response.status(404).sendFile(path + "/pagínas/pagina_arquivo_nao_encontrado.html")
+    response.status(404).sendFile(path + "/public/pagínas/pagina_arquivo_nao_encontrado.html")
 })
 
 app.listen(3000, console.log("O Servido está online"))
