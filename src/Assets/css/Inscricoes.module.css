@@ -1,0 +1,146 @@
+:root{
+    --cor-verde: #00bf63;
+    --cor-laranja: #ff914d;
+    --cor-laranja-escuro: #fa843b;
+}
+.corpo{
+    height: 70vh;
+    display: flex;
+}
+
+.inscricoes{
+    height: 90%;
+    width: 26%;
+    margin-top: 1.5%;
+    margin-left: 5%;
+    background-color: white;
+}
+.container_inscricoes{
+    height: 85%;
+    width: 90%;
+    margin-top: 5%;
+    margin-left: 5%;
+    /* border: 2px solid; */
+}
+.hr_inscricao{
+    margin: 2%;
+}
+.hr_minhas_inscricao{
+    margin-top: 13.2%;
+}
+
+.titulo{
+    font-size: 160%;
+    color: var(--cor-verde);
+}
+.texto{
+    margin: 5% 0px;
+    font-size: 120%;
+}
+.editais{
+    font-size: 120%;
+    color: var(--cor-verde);
+}
+
+.botao_laranja{
+    height: 10%;
+    border: solid 0px;
+    background-color: var(--cor-laranja);
+    width: 30%;
+    margin-left: 65%;
+}
+.botao_laranja:hover{
+    background-color: var(--cor-laranja-escuro);
+}
+
+.botao_laranja_minhas{
+    height: 10%;
+    border: solid 0px;
+    background-color: #ff914d;
+    width: 30%;
+    margin-top: 36.5%;
+    margin-left: 65%;
+}
+.botao_laranja_minhas:hover{
+    background-color: var(--cor-laranja-escuro);
+}
+
+.botao_andamento{
+    border: solid 0px;
+    background-color: #ffde59;
+    margin: 5vh;
+    height: 10%;
+    width: 26vw;
+    margin-left: 0vw;
+}
+.botao_andamento:hover{
+    background-color: #fcd435;
+}
+
+.novo{
+    height: 55%;
+}
+.container_novos{
+    margin-top: 5%;
+    border-left: 2px solid;
+    border-color: #ff3131;
+}
+
+.imagem_rodape{
+    height: 20vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("../img/Inscrições/Um menino e uma curuja.png");
+}
+
+@media only screen and (max-width: 1026px) {
+    .sino1{
+        height: 3vh;
+        margin-left: -5vw;
+    }
+    .corpo{
+        display: inline;
+    }
+    .inscricoes{
+        width: 90vw;
+        margin-left: 5vw;
+    }
+    .titulo{
+        font-size: 300%;
+    }
+    .texto{
+        font-size: 200%;
+    }
+    .editais{
+        font-size: 200%;
+    }
+    .botao_laranja{
+        font-size: 200%;
+        height: 5vh;
+        width: 40vw;
+        margin-left: 35vw;
+    }
+    .botao_laranja_minhas{
+        font-size: 200%;
+        height: 5vh;
+        width: 40vw;
+        margin-top: 5vh;
+        margin-left: 35vw;
+    }
+    .container_novos{
+        border-left: 10px solid;
+        border-color: #ff3131;
+    }
+    .botao_andamento{
+        font-size: 200%;
+        height: 5vh;
+        width: 75vw;
+        margin-left: 4vw;
+    }
+    .titulo1{
+        font-size: 200%;
+    }
+    .hr{
+        height: 20vh;
+    }
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Projetos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #333;
+        }
+
+        .header {
+            text-align: center;
+            background-color: #f27d32;
+            padding: 20px;
+            color: #000;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .projetos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .projeto {
+            background-color: #f27d32;
+            padding: 20px;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 8px;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .projeto h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        .projeto p {
+            margin-bottom: 0;
+        }
+
+        .icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5em;
+        }
+
+        .image-container {
+            position: relative;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Histórico de Projetos</h1>
+            <p>Eleriane Paula Branco de Gomes</p>
+            <p>CPF: 000.000.000-00</p>
+        </div>
+
+        <div class="projetos">
+            <div class="projeto">
+                <span class="icon">🔍</span>
+                <h2>Título: Arte Digital e Novas Mídias</h2>
+                <p>Exploração de novas tecnologias e mídias digitais para criar arte interativa, arte generativa, realidade aumentada, entre outros.</p>
+            </div>
+
+            <div class="projeto">
+                <span class="icon">🔍</span>
+                <h2>Título: Arte Ambiental</h2>
+                <p>Criação de obras que respondem ao ambiente natural, utilizando materiais encontrados localmente ou abordando questões ambientais.</p>
+            </div>
+
+            <div class="projeto">
+                <span class="icon">🔍</span>
+                <h2>Título: Residências Artísticas</h2>
+                <p>Participação em programas de residência onde artistas vivem e trabalham juntos por um período específico de tempo, colaborando e produzindo arte.</p>
+            </div>
+        </div>
+
+        <div class="image-container">
+            <img src="caminho_para_a_imagem.jpg" alt="Imagem de artistas">
+        </div>
+    </div>
+</body>
+
+</html>
