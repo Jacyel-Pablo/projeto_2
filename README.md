@@ -6,7 +6,9 @@ Para utilizar este codigo faça o seguinte
 
 1. instale os frameworks cors e express
 2. Use o terminar para da o comando cd no diretorio \codigos\codigo_js\Servidores
-3. Use o comando node server_paginas.js para iniciar o servidor
+3. Use o comando node seeders.js para iniciar o banco de dados
+4. Utilize o modo dev para colocar no minimo 4 filmes você pode ver exemplos em src/codigo_js/Exemplos de colocar filmes no banco.pdf
+5. Utilize o comando node server_paginas.js
 
 Agora basta colocar o endereço ip ou siplesmente localhost junto com a porta que e 3000 e escolher a rota desejada
 
