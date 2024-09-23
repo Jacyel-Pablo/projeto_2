@@ -1,6 +1,6 @@
 const botao_enviar = document.getElementById("enviar")
 
-botao_enviar.addEventListener("click", () => {
+botao_enviar.addEventListener("click", async () => {
     let apelido = document.getElementById("apelido")
     apelido = apelido.value
     let email = document.getElementById("email")

@@ -1,5 +1,7 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt"
+import dotenv, { parse } from "dotenv"
 
 // Ligação de dados com banco de dados
 
@@ -12,7 +14,7 @@ const prisma = new PrismaClient()
 rotas.get("/submit", async (request, response) => {
     const email = request.query.email
     const apelido = request.query.apelido
-    const senha = request.query.senha
+    const senha = await bcrypt.hash(request.query.senha, parseInt(process.env.PULO))
 
     async function main() {
         await prisma.usuario.create({
@@ -36,27 +38,28 @@ rotas.get("/submit", async (request, response) => {
 
 // Validar login e senha
 rotas.get("/valida", async (request, response) => {    
-    try{
-        async function main()
-        {
-            let dados = await prisma.usuario.findUnique({
-                where: {email: request.query.email}
-            })
+    const senha_user = await bcrypt.hash(request.query.senha, parseInt(process.env.PULO))
 
-            response.send(dados)
-        }
-
-        main().then(async () => {
-            await prisma.$disconnect()
-        }).catch(async (e) => {
-            console.log(e)
-            prisma.$disconnect()
-            process.exit(1)
+    async function main()
+    {
+        let dados = await prisma.usuario.findUnique({
+            where: {email: request.query.email}
         })
 
-    } catch(e) {
-        response.send({})
+        // if (dados.senha == senha_user) {
+        //     response.send(true)
+        // } else {
+        //     response.send(false)
+        // }
     }
+
+    main().then(async () => {
+        await prisma.$disconnect()
+    }).catch(async (e) => {
+        console.log(e)
+        prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
 // Enviar filmes para o banco de dados
