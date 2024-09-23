@@ -1,1 +1,1 @@
-post http://localhost:3000/submit?tabela=usuario&email=jacyell.moura&apelido=JacyelGamer&senha=123
+get http://localhost:3000/valida?email=jacyell.moura@gmail.com

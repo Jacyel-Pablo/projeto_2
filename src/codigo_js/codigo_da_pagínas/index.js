@@ -11,7 +11,8 @@ enviar.addEventListener("click", () => {
             alert("Email ou senha incorretos")
 
         } else {
-            if (senha.value == dados[0].senha && senha.value.length != 0) {
+            console.log(dados)
+            if (senha.value == dados.senha && senha.value.length != 0) {
                 window.location.href = "/menu.html"
             } else {
                 email.value = " "

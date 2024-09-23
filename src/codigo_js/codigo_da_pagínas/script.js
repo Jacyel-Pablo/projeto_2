@@ -34,7 +34,7 @@ function lancamento() {
                 a[contado - 1].id = `filme${contado} ${ultimo_index}`
 
                 fetch(`/pegar_ultima_tabela_filmes?numeros=${ultimo_index}`).then(tabela => tabela.json()).then(tabela => {
-                    tabela = tabela[0]
+                    tabela = tabela
 
                     const imagem = document.getElementById('imagem' + (4 - i).toString());
                     imagem.setAttribute('src', tabela.capa);
@@ -46,7 +46,7 @@ function lancamento() {
                     star.setAttribute('src', tabela.star);
         
                     const ava = document.getElementById('ava' + (4 - i).toString());
-                    ava.innerHTML = tabela.avaliação;
+                    ava.innerHTML = tabela.avaliacao;
                 })
                 ultimo_index = dados1["ultimo_index"]
 
@@ -57,7 +57,7 @@ function lancamento() {
 function dados_filme() {
     const nome_filme = localStorage.getItem('filme');
     fetch(`/pegar_ultima_tabela_filmes?numeros=${nome_filme}`).then(dados => dados.json()).then(dados => {
-        dados = dados[0]
+        dados = dados
         // colocando os dados
 
         const poster = document.getElementById('poster');
@@ -70,7 +70,7 @@ function dados_filme() {
         star.setAttribute('src', dados["star"]);
 
         const avalia = document.getElementById('avalia');
-        avalia.innerHTML = dados["avaliação"];
+        avalia.innerHTML = dados["avaliacao"];
 
         const sinopse_txt = document.getElementById('sinopse__txt');
         sinopse_txt.innerHTML = dados["sinopse"];

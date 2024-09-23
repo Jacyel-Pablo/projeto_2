@@ -1,37 +1,58 @@
 import express from "express";
-import conectar from "./migration.js";
+import { PrismaClient } from "@prisma/client";
 
 // Ligação de dados com banco de dados
 
 const rotas = express.Router()
 
-rotas.get("/submit", async (request, response) => {
-    const banco = await conectar()
+// Variavel do prisma
 
-    const tabela = request.query.tabela
+const prisma = new PrismaClient()
+
+rotas.get("/submit", async (request, response) => {
     const email = request.query.email
     const apelido = request.query.apelido
     const senha = request.query.senha
 
-    let sql = `
-        INSERT INTO ${tabela}(email, apelido, senha)
-        VALUES ("${email}", "${apelido}", "${senha}")
-    `
+    async function main() {
+        await prisma.usuario.create({
+            data: {
+                "email": email,
+                "apelido": apelido,
+                "senha": senha
+            }
+        })
+    }
 
-    await banco.run(sql)
+    main().then(async () => {
+        prisma.$disconnect()
+
+    }).catch(async (e) => {
+        console.log(e)
+        prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
 // Validar login e senha
-rotas.get("/valida", async (request, response) => {
-    const banco = await conectar()
-    
+rotas.get("/valida", async (request, response) => {    
     try{
-        let sql = `
-            SELECT * FROM usuario
-            WHERE email = "${request.query.email}"
-        `
+        async function main()
+        {
+            let dados = await prisma.usuario.findUnique({
+                where: {email: request.query.email}
+            })
 
-        response.send(await banco.all(sql))
+            response.send(dados)
+        }
+
+        main().then(async () => {
+            await prisma.$disconnect()
+        }).catch(async (e) => {
+            console.log(e)
+            prisma.$disconnect()
+            process.exit(1)
+        })
 
     } catch(e) {
         response.send({})
@@ -41,38 +62,53 @@ rotas.get("/valida", async (request, response) => {
 // Enviar filmes para o banco de dados
 
 rotas.get("/enviar_filmes", async (request, response) => {
-    const banco = await conectar()
-
     let capa = request.query.capa
     let nome = request.query.nome
     let star = request.query.star
     let avaliacao = request.query.avaliacao
     let sinopse = request.query.sinopse
 
-    let sql = `
-        INSERT INTO filmes(capa, nome, star, avaliação, sinopse)
-        VALUES ("${capa}", "${nome}", "${star}", "${avaliacao}", "${sinopse}")
-    `
+    async function main()
+    {
+        await prisma.filmes.create({
+            data: {
+                "capa": capa,
+                "nome": nome,
+                "star": star,
+                "avaliacao": avaliacao,
+                "sinopse": sinopse
+            }
+        })
+    }
 
-    await banco.run(sql)
+    main().then(async ()=>{
+        await prisma.$disconnect()
+    }).catch(async (e)=> {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
 rotas.get("/pegar_index_ultimo_filme", async (request, response) => {
-    const banco = await conectar()
 
-    let sql = `
-        SELECT COUNT(*) FROM filmes
-    `
+    async function main()
+    {
+        const ultima_tabela = await prisma.filmes.count()
 
-    let ultima_tabela = await banco.all(sql)
-    ultima_tabela = ultima_tabela[0]['COUNT(*)']
+        response.send({"ultimo_index":ultima_tabela})
+    }
 
-    response.send({"ultimo_index":ultima_tabela})
+    main().then(async () => {
+        await prisma.$disconnect()
+    }).catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
 rotas.get("/pegar_ultima_tabela_filmes", async (request, response) => {
-    const banco = await conectar()
-
     let numero = request.query.numeros
 
     let sql = `
@@ -80,7 +116,24 @@ rotas.get("/pegar_ultima_tabela_filmes", async (request, response) => {
         WHERE id=${numero}
     `
 
-    response.send(await banco.all(sql))
+    async function main()
+    {
+        let dados = await prisma.filmes.findUnique({
+            where: {
+                "id": Number(numero)
+            }
+        })
+
+        response.send(dados)
+    }
+
+    main().then(async () => {
+        await prisma.$disconnect()
+    }).catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
 export default rotas

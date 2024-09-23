@@ -1,6 +1,5 @@
 import express from "express"
 import cors from "cors"
-import conectar from "./migration.js"
 import rotas from "./ligacao.js"
 
 // Indo para pasta principal
