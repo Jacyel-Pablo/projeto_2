@@ -96,6 +96,10 @@ app.get("/user__config.html/user__config.css", (request, response) => {
     response.sendFile(path + "/public/css/user__config.css")
 })
 
+app.get("/user__config.js", (request, response) => {
+    response.sendFile(path + "/src/codigo_js/codigo_da_pagínas/user__config.js")
+})
+
 // Pagína dados__filme.html
 app.get("/dados__filme.html", (request, response) => {
     response.sendFile(path + "/public/pagínas/dados__filme.html")

@@ -34,7 +34,6 @@ function lancamento() {
                 a[contado - 1].id = `filme${contado} ${ultimo_index}`
 
                 fetch(`/pegar_ultima_tabela_filmes?numeros=${ultimo_index}`).then(tabela => tabela.json()).then(tabela => {
-                    tabela = tabela
 
                     const imagem = document.getElementById('imagem' + (4 - i).toString());
                     imagem.setAttribute('src', tabela.capa);
@@ -54,10 +53,14 @@ function lancamento() {
         })
     });
 }
+
+const star = document.getElementById('star')
+
 function dados_filme() {
     const nome_filme = localStorage.getItem('filme');
+
+    // Adicionar os dados na tela
     fetch(`/pegar_ultima_tabela_filmes?numeros=${nome_filme}`).then(dados => dados.json()).then(dados => {
-        dados = dados
         // colocando os dados
 
         const poster = document.getElementById('poster');
@@ -65,14 +68,54 @@ function dados_filme() {
 
         const nome_filme1 = document.getElementById('nome__filme');
         nome_filme1.innerHTML = dados["nome"];
+        
+        fetch(`/avaliacao_user?id_filme=${nome_filme}&email=${localStorage.getItem("email")}`).then(dados1 => dados1.json()).then(dados1 => {
+            if (dados1 == true) {
+                star.setAttribute('src', "/full.png");
 
-        const star = document.getElementById('star');
-        star.setAttribute('src', dados["star"]);
+            } else {
+                star.setAttribute('src', "/zero.png");
+            }
+        })
 
         const avalia = document.getElementById('avalia');
-        avalia.innerHTML = dados["avaliacao"];
+
+        fetch(`/votos?id=${nome_filme}`).then(dados2 => dados2.json()).then(dados2 => {
+            avalia.innerHTML = dados2;
+        })
 
         const sinopse_txt = document.getElementById('sinopse__txt');
         sinopse_txt.innerHTML = dados["sinopse"];
     });
+}
+
+
+function adicionar_remover_estrela()
+{
+    const nome_filme = localStorage.getItem('filme');
+
+    fetch(`/avaliacao_user?id_filme=${nome_filme}&email=${localStorage.getItem("email")}`).then(dados => dados.json()).then(dados => {
+        if (dados == true) {
+            fetch(`/votos?id=${nome_filme}`).then(dados2 => dados2.json()).then(dados2 => {
+                dados2 -= 1
+                const avalia = document.getElementById('avalia');
+
+                avalia.innerHTML = dados2
+            })
+
+            star.setAttribute('src', "/zero.png");
+            fetch(`/ativa_desativa_estrela?condicao_estrela=off&email=${localStorage.getItem("email")}&id=${localStorage.getItem("filme")}`)
+
+        } else {
+            fetch(`/votos?id=${nome_filme}`).then(dados2 => dados2.json()).then(dados2 => {
+                dados2 += 1
+                const avalia = document.getElementById('avalia');
+
+                avalia.innerHTML = dados2
+            })
+
+            star.setAttribute('src', "/full.png");
+            fetch(`/ativa_desativa_estrela?condicao_estrela=on&email=${localStorage.getItem("email")}&id=${localStorage.getItem("filme")}`)
+        }
+    })
 }

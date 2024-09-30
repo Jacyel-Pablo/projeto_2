@@ -10,17 +10,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model usuario{
+  email String @unique @id
+  apelido String @unique
+  senha String
+  Estrelas estrelas[]
+}
+
+// Tabela de estrelas em que o usúario clicou na estrela
+model estrelas{
+  id Int @default(autoincrement()) @id
+  id_filmes Int
+  email String
+  
+  filme filmes @relation(fields: [id_filmes], references: [id_filmes])
+  usuarios usuario @relation(fields: [email], references: [email])
+}
+
 model filmes{
-  id Int @id @default(autoincrement())
+  id_filmes Int @id @default(autoincrement())
   capa String
   nome String
   star String
   avaliacao String
   sinopse String
-}
-
-model usuario{
-  email String @unique @id
-  apelido String @unique
-  senha String
+  estrela estrelas[]
 }
