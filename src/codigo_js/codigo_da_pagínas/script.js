@@ -27,6 +27,7 @@ function lancamento() {
 
             for (let i = 0; i < 4; i++) {
                 ultimo_index -= i
+                let copy_ultimo_index = ultimo_index
                 // Pegar tag a
                 contado -= 1
                 console.log(contado)
@@ -42,10 +43,16 @@ function lancamento() {
                     nome.innerHTML = tabela.nome;
         
                     const star = document.getElementById('star' + (4 - i).toString());
-                    star.setAttribute('src', tabela.star);
+                    star.setAttribute('src', "/full.png");
         
                     const ava = document.getElementById('ava' + (4 - i).toString());
-                    ava.innerHTML = tabela.avaliacao;
+
+                    fetch(`/votos?id=${copy_ultimo_index}`).then(dados2 => dados2.json()).then(dados2 => {
+                        console.log(dados2)
+                        ava.innerHTML = dados2;
+                    })
+
+                    copy_ultimo_index -= 1
                 })
                 ultimo_index = dados1["ultimo_index"]
 

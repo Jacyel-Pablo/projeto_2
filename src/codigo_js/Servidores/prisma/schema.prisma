@@ -31,8 +31,6 @@ model filmes{
   id_filmes Int @id @default(autoincrement())
   capa String
   nome String
-  star String
-  avaliacao String
   sinopse String
   estrela estrelas[]
 }

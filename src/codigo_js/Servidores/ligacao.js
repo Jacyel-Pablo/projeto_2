@@ -73,8 +73,6 @@ rotas.get("/valida", async (request, response) => {
 rotas.get("/enviar_filmes", async (request, response) => {
     let capa = request.query.capa
     let nome = request.query.nome
-    let star = request.query.star
-    let avaliacao = request.query.avaliacao
     let sinopse = request.query.sinopse
 
     async function main()
@@ -83,8 +81,6 @@ rotas.get("/enviar_filmes", async (request, response) => {
             data: {
                 "capa": capa,
                 "nome": nome,
-                "star": star,
-                "avaliacao": avaliacao,
                 "sinopse": sinopse
             }
         })
