@@ -1,9 +1,4 @@
-*{
-    margin: 0px 0px;
-    padding: 0px 0px;
-    box-sizing: border-box;
-}
-body{
+.corpo{
     height: 100vh;
     align-content: center;
 }

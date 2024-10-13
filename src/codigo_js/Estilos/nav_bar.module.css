@@ -1,0 +1,50 @@
+/* Menu da pagina */
+.menu{
+    display: flex;
+    align-items: center;
+    background-color: rgb(201, 35, 35);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+}
+.menu_a{
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+}
+.logo__cinetime{
+    color: white;
+    font-size: 3em;
+    margin: 0em 0.5em;
+}
+.campo__busca{
+    height: 3em;
+    width: 23em;
+    margin-right: 6em;
+    padding-left: 1em;
+    border-radius: 1.5em;
+    background-color: rgb(59, 59, 59);
+    color: white;
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+    position: fixed;
+    right: 0;
+}
+.perfil_link{
+    background-color: green;
+    /* height: 3em; */
+    width: 3em;
+    margin-left: 1em;
+    margin-top: -3em;
+}
+.perfil{
+    background-color: aqua;
+    border-radius: 2em;
+    position: fixed;
+    height: 3em;
+    width: 3em;
+    right: 0;
+    margin-right: 20px;
+}

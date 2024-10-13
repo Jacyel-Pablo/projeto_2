@@ -4,7 +4,7 @@ Este e um repositorio criado para a martéria de Linguagens de programação
 
 Para utilizar este codigo faça o seguinte
 
-1. instale os frameworks cors e express
+1. instale os frameworks necessarios
 2. Use o terminar para da o comando cd no diretorio \codigos\codigo_js\Servidores
 3. Use o comando node seeders.js para iniciar o banco de dados
 4. Utilize o modo dev para colocar no minimo 4 filmes você pode ver exemplos em src/codigo_js/Exemplos de colocar filmes no banco.pdf

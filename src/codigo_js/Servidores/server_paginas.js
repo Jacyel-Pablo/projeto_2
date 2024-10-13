@@ -1,22 +1,7 @@
+import { PrismaClient } from "@prisma/client"
 import express from "express"
 import cors from "cors"
-import rotas from "./ligacao.js"
 
-// Indo para pasta principal
-let path1 = process.cwd().split("\\")
-let path = ""
-
-for(let i = 0; i < path1.length - 3; i++) {
-    if (i == 0) {
-        path += path1[i]
-
-    } else {
-        path += "/" + path1[i]
-
-    }
-}
-
-// Criando um servido
 const app = express()
 
 app.use(express.json())
@@ -29,119 +14,326 @@ app.use(
       credentials: true,
       preflightContinue: false,
     })
-  );
+);
 
-// Rotas de comunicação com o servidor
-app.use(rotas)
+// Variavel do prisma
 
-// Pagína index.html
+const prisma = new PrismaClient()
 
-app.get("/", (request, response) => {
-    response.sendFile(path + "/public/index.html")
+app.post("/submit", async (request, response) => {
+    const email = request.query.email
+    const apelido = request.query.apelido
+    const senha = request.query.senha //await bcrypt.hash(request.query.senha, parseInt(process.env.PULO))
+
+    async function main() {
+        await prisma.usuario.create({
+            data: {
+                "email": email,
+                "apelido": apelido,
+                "senha": senha
+            }
+        })
+    }
+
+    main().then(async () => {
+        prisma.$disconnect()
+
+    }).catch(async (e) => {
+        console.log(e)
+        prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
-// Modo dev
-app.get("/.dev", (request, response) => {
-    response.sendFile(path + "/public/pagínas/modo_dev.html")
+// Validar login e senha
+app.get("/valida", async (request, response) => { 
+    const senha_user = request.query.senha //await bcrypt.hash(request.query.senha, parseInt(process.env.PULO))
+
+    async function main()
+    {
+        let dados = await prisma.usuario.findUnique({
+            where: {email: request.query.email}
+        })
+
+        try {
+            if (dados.senha == senha_user) {
+                delete dados.senha
+                response.send(dados)
+            } else {
+                response.send(false)
+            }
+        } catch(e) {
+            console.log(e)
+            response.send(false)
+        }
+    }
+
+    main().then(async () => {
+        await prisma.$disconnect()
+    }).catch(async (e) => {
+        console.log(e)
+        prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
-app.get("/.dev.css", (request, response) => {
-    response.sendFile(path + "/public/css/modo_dev.css")
+// Enviar filmes para o banco de dados
+
+app.post("/enviar_filmes", async (request, response) => {
+    let capa = request.query.capa
+    let nome = request.query.nome
+    let sinopse = request.query.sinopse
+
+    async function main()
+    {
+        await prisma.filmes.create({
+            data: {
+                "capa": capa,
+                "nome": nome,
+                "sinopse": sinopse
+            }
+        })
+    }
+
+    main().then(async ()=>{
+        await prisma.$disconnect()
+    }).catch(async (e)=> {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
-app.get("/.dev.js", (request, response) => {
-    response.sendFile(path + "/src/codigo_js/codigo_da_pagínas/modo_dev.js")
+app.get("/pegar_index_ultimo_filme", async (request, response) => {
+
+    async function main()
+    {
+        const ultima_tabela = await prisma.filmes.findMany()
+
+        // response.send({"ultimo_index":ultima_tabela})
+        response.send([
+            ultima_tabela[ultima_tabela.length - 1].id_filmes,
+            ultima_tabela[ultima_tabela.length - 2].id_filmes,
+            ultima_tabela[ultima_tabela.length - 3].id_filmes,
+            ultima_tabela[ultima_tabela.length - 4].id_filmes
+        ])
+    }
+
+    main().then(async () => {
+        await prisma.$disconnect()
+    }).catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
-// Pagína index.html
+app.get("/pegar_ultima_tabela_filmes", async (request, response) => {
+    let numero = request.query.numeros
 
-app.get("/index.html/index.css", (request, response) => {
-    response.sendFile(path + "/public/css/index.css")
+    let sql = `
+        SELECT * FROM filmes
+        WHERE id=${numero}
+    `
+
+    async function main()
+    {
+        let dados = await prisma.filmes.findUnique({
+            where: {
+                "id_filmes": Number(numero)
+            }
+        })
+
+        response.send(dados)
+    }
+
+    main().then(async () => {
+        await prisma.$disconnect()
+    }).catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
-app.get("/index.js", (resquest, response) => {
-    response.sendFile(path + "/src/codigo_js/codigo_da_pagínas/index.js")
+// rotas dados__filme.html
+// rota de avaliação de filmes visualizar quantas estrelas um filme tem
+app.get("/avaliacao_user", async (request, response) => {
+    const id_filme = request.query.id_filme
+    const email = request.query.email
+
+    async function main()
+    {
+        try{
+            const dados = await prisma.estrelas.findMany({
+                where: {
+                    id_filmes: parseInt(id_filme)
+                }
+            })
+
+            let valor = false
+
+            for (let i = 0; i < dados.length; i++) {
+                if (dados[i].email == email) {
+                    valor = true
+
+                }
+            }
+
+            response.send(valor)
+
+        } catch (e) {
+            console.log(e)
+            response.send(false)
+        }
+    }
+
+    main().then(async () => await prisma.$disconnect())
+    .catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
-// Pagína criar conta.html
+// rota de contar as estrelas que um filme possui
+app.get("/votos", async (request, response) => {
+    const id_filme = parseInt(request.query.id)
 
-app.get("/criar_conta.html", (request, response) => {
-    response.sendFile(path + "/public/pagínas/criar conta.html")
+    async function main() {
+        try{
+            const dados = await prisma.estrelas.count({
+                where: {
+                    id_filmes: id_filme
+                }
+            })
+            
+            response.send(dados.toString())
+
+        } catch(e) {
+            response.send("0")
+        }
+    }
+
+    main().then(async () => await prisma.$disconnect())
+    .catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
-app.get("/criar_conta.js", (request, response) => {
-    response.sendFile(path + "/src/codigo_js/codigo_da_pagínas/criar_conta.js")
+// registra se o usúario apertou ou não a estrela
+app.post("/ativa_desativa_estrela", (request, response) => {
+    const ativa_desativa = request.query.condicao_estrela
+    const email = request.query.email
+    const id_filme = parseInt(request.query.id)
+
+    async function main() {
+        if (ativa_desativa == "off") {
+            await prisma.estrelas.deleteMany({
+                where: {
+                    id_filmes: id_filme,
+                    email: email
+                }
+            })
+
+        } else {
+            await prisma.estrelas.create({
+                data: {
+                    id_filmes: id_filme,
+                    email: email
+                }
+            })
+        }
+    }
+
+    main().then(async () => await prisma.$disconnect())
+    .catch(async (e) => {
+        console.log(e)
+        prisma.$disconnect()
+        process.exit(1)
+    })
 })
 
-// Pagína menu.html
+// user_config.js altera nome
 
-app.get("/menu.html", (request, response) => {
-    response.sendFile(path + "/public/pagínas/menu.html")
+// Função de alterar
+app.get("/alterar_nome", (request, response) => {
+    const email = request.query.email
+    const nome = request.query.nome
+
+    async function main()
+    {
+        try {
+            await prisma.usuario.update({
+                where: {
+                    email: email
+                },
+                data: {
+                    apelido: nome
+                }
+            })
+
+            response.send(true)
+            
+        } catch(e) {
+            response.send(false)
+        }
+    }
+
+    main().then(async () => await prisma.$disconnect())
+    .catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+
+    })
 })
 
-app.get("/menu.css", (request, response) => {
-    response.sendFile(path + "/public/css/menu.css")
+// Função adicionar os filmes na lista de favorios
+
+app.get("/lista", (request, response) => {
+    const email = request.query.email
+
+    async function main()
+    {
+        try {
+            const dados_lista = await prisma.estrelas.findMany({
+                where: {
+                    email: email
+                }
+            })
+    
+            const lista_filmes = []
+    
+            let dados
+    
+            for (let i = 0; i < dados_lista.length; i++) {
+                dados = await prisma.filmes.findMany({
+                    where: {
+                        id_filmes: dados_lista[i].id_filmes
+                    }
+                })
+    
+                lista_filmes.push(dados)
+            }
+    
+            response.send(lista_filmes)
+
+        } catch (e) {
+            console.log(e)
+            response.send([])
+        }
+    }
+
+    main().then(async () => await prisma.$disconnect())
+    .catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
 })
-
-app.get("/script.js", (request, response) => {
-    response.sendFile(path + "/src/codigo_js/codigo_da_pagínas/script.js")
-})
-
-// Pagína user__config.html
-app.get("/user__config.html", (request, response) => {
-    response.sendFile(path + "/public/pagínas/user__config.html")
-})
-
-app.get("/user__config.html/user__config.css", (request, response) => {
-    response.sendFile(path + "/public/css/user__config.css")
-})
-
-app.get("/user__config.js", (request, response) => {
-    response.sendFile(path + "/src/codigo_js/codigo_da_pagínas/user__config.js")
-})
-
-// Pagína dados__filme.html
-app.get("/dados__filme.html", (request, response) => {
-    response.sendFile(path + "/public/pagínas/dados__filme.html")
-})
-
-app.get("/dados__filme.html/dados__filme.css", (request, response) => {
-    response.sendFile(path + "/public/css/dados__filme.css")
-})
-
-// Assets
-
-// imagem Seta voltar.png
-
-app.get("/Seta_voltar.png", (request, response) => {
-    response.sendFile(path + "/public/Resources/user__config/Seta voltar.png")
-})
-
-// Estrelas 
-app.get("/full.png", (request, response) => {
-    response.sendFile(path + "/public/Resources/full.png")
-})
-
-app.get("/meia.png", (request, response) => {
-    response.sendFile(path + "/public/Resources/meia.png")
-})
-
-app.get("/zero.png", (request, response) => {
-    response.sendFile(path + "/public/Resources/zero.png")
-})
-
-// Dados da parte menu
-
-app.get("/Dados_menu", (request, response) => {
-    response.send([
-        ["https://th.bing.com/th/id/OIP.t00ptKD6SzQXCqjZ4rYypwHaHa?rs=1&pid=ImgDetMain", "Duna: Parte 2", "/meia.png", "4,0"],
-        ["https://elimeira.com.br/wp-content/uploads/2024/02/zona-de-risco.jpeg", "Zona de Risco", "/meia.png", "3,0"],
-        ["https://br.web.img3.acsta.net/c_310_420/pictures/24/02/26/15/51/5309637.jpg", "A Serva", "/zero.png", "0,0"],
-        ["https://th.bing.com/th/id/OIP.rFDYUreRHlSKfOUthDdDiQAAAA?w=270&h=400&rs=1&pid=ImgDetMain", "Os Farofeiros 2", "/meia.png", "3,1"]
-    ])
-})
-
-// Dados da pagína dados__filme.html
 
 // app.get("/Dados_dados_filme", (request, response) => {
 //     response.send(    
@@ -153,11 +345,5 @@ app.get("/Dados_menu", (request, response) => {
 //         ["kung_fu_panda_4", "https://th.bing.com/th/id/OIP.94api0uULtTrc4uZy1vlsAAAAA?w=474&h=709&rs=1&pid=ImgDetMain", "Kung Fu Panda 4", "/meia.png", "3,8", "Depois de três aventuras arriscando sua própria vida para derrotar os mais poderosos vilões, Po, o Grande Dragão Guerreiro( Jack Black) é escolhido para se tornar o Líder Espiritual do Vale da Paz. A escolha em si já problemática ao colocar o mestre de kung fu mais improvável do mundo em um cargo como esse e além disso, ele precisa encontrar e treinar um novo Dragão Guerreiro antes de assumir a honrada posição e a pessoa certa parece ser Zhen (Awkwafina) uma raposa com muitas habilidades, mas que não gosta muito da ideia de ser treinada. Como se os desafios já não fossem o bastante, a Camaleoa (Viola Davis), uma feiticeira perversa, tenta trazer de volta todos os vilões derrotados por Po do reino espiritual."]
 //     ])
 // })
-
-// Pagína de erro
-
-app.use((request, response) => {
-    response.status(404).sendFile(path + "/public/pagínas/pagina_arquivo_nao_encontrado.html")
-})
 
 app.listen(3000, console.log("O Servido está online"))
