@@ -1,11 +1,10 @@
 .body_pag{
-    margin-top: 14vh;
-    height: 86vh;
+    height: 100vh;
     overflow-y: auto;
     background-color: #000000;
 }
 .lancamento{
-    margin-top: 4em;
+    margin-top: 9em;
 }
 .secoes{
     width: 100%;
