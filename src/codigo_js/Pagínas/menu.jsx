@@ -23,10 +23,10 @@ export default function Menu()
         nome3: "Nome do filme",
         nome4: "Nome do filme",
 
-        ava1: "",
-        ava2: "",
-        ava3: "",
-        ava4: ""
+        ava1: "0",
+        ava2: "0",
+        ava3: "0",
+        ava4: "0"
     })
 
     function lancamento() {
@@ -34,18 +34,21 @@ export default function Menu()
             // Acessando ultimo valor da tabela
             fetch("http://localhost:3000/pegar_index_ultimo_filme").then(dados1 => dados1.json()).then(dados1 => {
                 for (let i = 0; i < 4; i++) {
-                    
-                    fetch(`http://localhost:3000/pegar_ultima_tabela_filmes?numeros=${dados1[i]}`).then(tabela => tabela.json()).then(tabela => {
+                    console.log(dados1[i])
+                    fetch(`http://localhost:3000/pegar_filmes_da_tabela?numeros=${dados1[i]}`).then(tabela => tabela.json()).then(tabela => {
             
-                        fetch(`http://localhost:3000/votos?id=${dados1[i]}`).then(dados2 => dados2.json()).then(dados2 => {
-                            setDados(copiar => ({
-                                ...copiar,
-                                ['imagem' + (4 - i).toString()]: tabela.capa,
-                                ['id' + (4 - i).toString()]: dados1[i],
-                                ['nome' + (4 - i).toString()]: tabela.nome,
-                                ['ava' + (4 - i).toString()]: dados2
-                            }))
-                        })
+                        // Vamos verificar se a algum filme na tabela antés de pegar os dados
+                        if (tabela != false) {
+                            fetch(`http://localhost:3000/votos?id=${dados1[i]}`).then(dados2 => dados2.json()).then(dados2 => {
+                                setDados(copiar => ({
+                                    ...copiar,
+                                    ['imagem' + (4 - i).toString()]: tabela.capa,
+                                    ['id' + (4 - i).toString()]: dados1[i],
+                                    ['nome' + (4 - i).toString()]: tabela.nome,
+                                    ['ava' + (4 - i).toString()]: dados2
+                                }))
+                            })
+                        }
                     })
 
                 }

@@ -11,7 +11,7 @@ export default function Dados__filme()
         poster: "https://th.bing.com/th/id/OIP.qlFuyLoeOSg012B3TDCogAAAAA?rs=1&pid=ImgDetMain",
         nome__filme: "",
         star: "",
-        avalia: "",
+        avalia: "0",
         sinopse__txt: ""
     })
 
@@ -20,7 +20,7 @@ export default function Dados__filme()
     function dados_filme() {
 
         // Adicionar os dados na tela
-        fetch(`http://localhost:3000/pegar_ultima_tabela_filmes?numeros=${nome_filme}`).then(infor => infor.json()).then(infor => {
+        fetch(`http://localhost:3000/pegar_filmes_da_tabela?numeros=${nome_filme}`).then(infor => infor.json()).then(infor => {
             // colocando os dados
 
             setDados(copiar => ({

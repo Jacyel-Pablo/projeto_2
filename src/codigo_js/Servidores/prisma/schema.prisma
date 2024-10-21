@@ -10,27 +10,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model usuario{
+// datasource db {
+//   provider = "postgresql"
+//   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+//   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+// }
+
+model usuario_projeto_2{
   email String @unique @id
   apelido String @unique
   senha String
-  Estrelas estrelas[]
+  Estrelas estrelas_projeto_2[]
 }
 
 // Tabela de estrelas em que o usúario clicou na estrela
-model estrelas{
+model estrelas_projeto_2{
   id Int @default(autoincrement()) @id
   id_filmes Int
   email String
   
-  filme filmes @relation(fields: [id_filmes], references: [id_filmes])
-  usuarios usuario @relation(fields: [email], references: [email])
+  filme filmes_projeto_2 @relation(fields: [id_filmes], references: [id_filmes])
+  usuarios usuario_projeto_2 @relation(fields: [email], references: [email])
 }
 
-model filmes{
-  id_filmes Int @id @default(autoincrement())
+model filmes_projeto_2{
+  id_filmes Int @default(autoincrement()) @unique @id
   capa String
   nome String
   sinopse String
-  estrela estrelas[]
+  estrela estrelas_projeto_2[]
 }

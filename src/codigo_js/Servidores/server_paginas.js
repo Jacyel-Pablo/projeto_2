@@ -2,6 +2,25 @@ import { PrismaClient } from "@prisma/client"
 import express from "express"
 import cors from "cors"
 
+// Função que verificar se o valor do numero da rota "pegar_filmes_da_tabela" e número ou não
+function isNumeric(str)
+{
+    let validacao = true
+
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] in ['1', '2', '3', '4', '5', '6', '7', '8', '9'] == false) {
+            validacao = false
+            break
+        }
+        if (str == undefined) {
+            validacao = false
+            break
+        }
+    }
+
+    return validacao
+}
+
 const app = express()
 
 app.use(express.json())
@@ -26,7 +45,7 @@ app.post("/submit", async (request, response) => {
     const senha = request.query.senha //await bcrypt.hash(request.query.senha, parseInt(process.env.PULO))
 
     async function main() {
-        await prisma.usuario.create({
+        await prisma.usuario_projeto_2.create({
             data: {
                 "email": email,
                 "apelido": apelido,
@@ -51,7 +70,7 @@ app.get("/valida", async (request, response) => {
 
     async function main()
     {
-        let dados = await prisma.usuario.findUnique({
+        let dados = await prisma.usuario_projeto_2.findUnique({
             where: {email: request.query.email}
         })
 
@@ -86,7 +105,7 @@ app.post("/enviar_filmes", async (request, response) => {
 
     async function main()
     {
-        await prisma.filmes.create({
+        await prisma.filmes_projeto_2.create({
             data: {
                 "capa": capa,
                 "nome": nome,
@@ -108,15 +127,17 @@ app.get("/pegar_index_ultimo_filme", async (request, response) => {
 
     async function main()
     {
-        const ultima_tabela = await prisma.filmes.findMany()
+        const ultima_tabela = await prisma.filmes_projeto_2.findMany()
 
+        const lista_index_filme = []
+        for (let i = 0; i < ultima_tabela.length; i++) {
+
+            if (i <= 3 && await prisma.filmes_projeto_2.count() >= i + 1) {
+                lista_index_filme.push(ultima_tabela[ultima_tabela.length - (i + 1)].id_filmes)
+            }
+        }
         // response.send({"ultimo_index":ultima_tabela})
-        response.send([
-            ultima_tabela[ultima_tabela.length - 1].id_filmes,
-            ultima_tabela[ultima_tabela.length - 2].id_filmes,
-            ultima_tabela[ultima_tabela.length - 3].id_filmes,
-            ultima_tabela[ultima_tabela.length - 4].id_filmes
-        ])
+        response.send(lista_index_filme)
     }
 
     main().then(async () => {
@@ -128,23 +149,37 @@ app.get("/pegar_index_ultimo_filme", async (request, response) => {
     })
 })
 
-app.get("/pegar_ultima_tabela_filmes", async (request, response) => {
-    let numero = request.query.numeros
-
-    let sql = `
-        SELECT * FROM filmes
-        WHERE id=${numero}
-    `
+app.get("/pegar_filmes_da_tabela", async (request, response) => {
 
     async function main()
     {
-        let dados = await prisma.filmes.findUnique({
-            where: {
-                "id_filmes": Number(numero)
-            }
-        })
 
-        response.send(dados)
+        try {
+            const numero = request.query.numeros
+
+            // O if vai verificar se a algum projeto dentro do banco ou não
+            if (await prisma.filmes_projeto_2.count() != 0 && isNumeric(numero) == true) {
+
+                let dados = await prisma.filmes_projeto_2.findUnique({
+                    where: {
+                        "id_filmes": Number(numero)
+                    }
+                })
+
+                if (dados != null) {
+                    response.send(dados)
+                } else {
+                    response.send(false)
+                }
+
+            } else {
+                response.send(false)
+            }
+    
+        } catch (e) {
+            console.log(e)
+            response.send(false)
+        }
     }
 
     main().then(async () => {
@@ -165,7 +200,7 @@ app.get("/avaliacao_user", async (request, response) => {
     async function main()
     {
         try{
-            const dados = await prisma.estrelas.findMany({
+            const dados = await prisma.estrelas_projeto_2.findMany({
                 where: {
                     id_filmes: parseInt(id_filme)
                 }
@@ -202,7 +237,7 @@ app.get("/votos", async (request, response) => {
 
     async function main() {
         try{
-            const dados = await prisma.estrelas.count({
+            const dados = await prisma.estrelas_projeto_2.count({
                 where: {
                     id_filmes: id_filme
                 }
@@ -231,7 +266,7 @@ app.post("/ativa_desativa_estrela", (request, response) => {
 
     async function main() {
         if (ativa_desativa == "off") {
-            await prisma.estrelas.deleteMany({
+            await prisma.estrelas_projeto_2.deleteMany({
                 where: {
                     id_filmes: id_filme,
                     email: email
@@ -239,7 +274,7 @@ app.post("/ativa_desativa_estrela", (request, response) => {
             })
 
         } else {
-            await prisma.estrelas.create({
+            await prisma.estrelas_projeto_2.create({
                 data: {
                     id_filmes: id_filme,
                     email: email
@@ -266,7 +301,7 @@ app.get("/alterar_nome", (request, response) => {
     async function main()
     {
         try {
-            await prisma.usuario.update({
+            await prisma.usuario_projeto_2.update({
                 where: {
                     email: email
                 },
@@ -299,7 +334,7 @@ app.get("/lista", (request, response) => {
     async function main()
     {
         try {
-            const dados_lista = await prisma.estrelas.findMany({
+            const dados_lista = await prisma.estrelas_projeto_2.findMany({
                 where: {
                     email: email
                 }
@@ -310,7 +345,7 @@ app.get("/lista", (request, response) => {
             let dados
     
             for (let i = 0; i < dados_lista.length; i++) {
-                dados = await prisma.filmes.findMany({
+                dados = await prisma.filmes_projeto_2.findMany({
                     where: {
                         id_filmes: dados_lista[i].id_filmes
                     }
