@@ -1,6 +1,8 @@
 import style from "../Estilos/index.module.css"
 import { useState } from "react";
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import dotenv from "dotenv"
+import { criar_token } from "../Servidores/middleware";
 
 export default function Index()
 {
@@ -27,6 +29,7 @@ export default function Index()
                 alert("Email ou senha incorretos")
     
             } else {
+                localStorage.setItem("token", dados1.email_encrypt)
                 localStorage.setItem("email", dados.email)
                 localStorage.setItem("apelido", dados1.apelido)
                 window.location.href = "/menu.html"

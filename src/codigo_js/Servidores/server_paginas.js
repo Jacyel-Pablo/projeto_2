@@ -1,25 +1,9 @@
 import { PrismaClient } from "@prisma/client"
 import express from "express"
 import cors from "cors"
-
-// Função que verificar se o valor do numero da rota "pegar_filmes_da_tabela" e número ou não
-function isNumeric(str)
-{
-    let validacao = true
-
-    for (let i = 0; i < str.length; i++) {
-        if (str[i] in ['1', '2', '3', '4', '5', '6', '7', '8', '9'] == false) {
-            validacao = false
-            break
-        }
-        if (str == undefined) {
-            validacao = false
-            break
-        }
-    }
-
-    return validacao
-}
+import bcrypt from "bcrypt"
+import dotenv from "dotenv"
+import { isNumeric, criar_token, valida_token } from "./middleware.js"
 
 const app = express()
 
@@ -42,7 +26,7 @@ const prisma = new PrismaClient()
 app.post("/submit", async (request, response) => {
     const email = request.query.email
     const apelido = request.query.apelido
-    const senha = request.query.senha //await bcrypt.hash(request.query.senha, parseInt(process.env.PULO))
+    const senha = await bcrypt.hash(request.query.senha, Number(process.env.PULO))
 
     async function main() {
         await prisma.usuario_projeto_2.create({
@@ -66,7 +50,7 @@ app.post("/submit", async (request, response) => {
 
 // Validar login e senha
 app.get("/valida", async (request, response) => { 
-    const senha_user = request.query.senha //await bcrypt.hash(request.query.senha, parseInt(process.env.PULO))
+    const senha_user = request.query.senha
 
     async function main()
     {
@@ -75,8 +59,11 @@ app.get("/valida", async (request, response) => {
         })
 
         try {
-            if (dados.senha == senha_user) {
+            if (await bcrypt.compare(senha_user, dados.senha) && dados.length != 0) {
                 delete dados.senha
+
+                dados["email_encrypt"] = criar_token({email_encrypt: dados.email})
+
                 response.send(dados)
             } else {
                 response.send(false)
@@ -94,6 +81,19 @@ app.get("/valida", async (request, response) => {
         prisma.$disconnect()
         process.exit(1)
     })
+})
+
+// Validação do token de login
+
+app.get(("/validar_token"), (request, response) => {
+    const token = request.query.token
+
+    try {
+        response.send(valida_token(token))
+
+    } catch(e) {
+        response.send(false)
+    }
 })
 
 // Enviar filmes para o banco de dados
@@ -261,7 +261,7 @@ app.get("/votos", async (request, response) => {
 // registra se o usúario apertou ou não a estrela
 app.post("/ativa_desativa_estrela", (request, response) => {
     const ativa_desativa = request.query.condicao_estrela
-    const email = request.query.email
+    const email1 = request.query.email
     const id_filme = parseInt(request.query.id)
 
     async function main() {
@@ -277,7 +277,7 @@ app.post("/ativa_desativa_estrela", (request, response) => {
             await prisma.estrelas_projeto_2.create({
                 data: {
                     id_filmes: id_filme,
-                    email: email
+                    email: email1
                 }
             })
         }

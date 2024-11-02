@@ -34,7 +34,6 @@ export default function Menu()
             // Acessando ultimo valor da tabela
             fetch("http://localhost:3000/pegar_index_ultimo_filme").then(dados1 => dados1.json()).then(dados1 => {
                 for (let i = 0; i < 4; i++) {
-                    console.log(dados1[i])
                     fetch(`http://localhost:3000/pegar_filmes_da_tabela?numeros=${dados1[i]}`).then(tabela => tabela.json()).then(tabela => {
             
                         // Vamos verificar se a algum filme na tabela antés de pegar os dados
