@@ -150,34 +150,37 @@ app.get("/pegar_index_ultimo_filme", async (request, response) => {
 })
 
 app.get("/pegar_filmes_da_tabela", async (request, response) => {
+    const numero = request.query.numeros
+    const token = request.query.token
 
     async function main()
     {
-
-        try {
-            const numero = request.query.numeros
-
-            // O if vai verificar se a algum projeto dentro do banco ou não
-            if (await prisma.filmes_projeto_2.count() != 0 && isNumeric(numero) == true) {
-
-                let dados = await prisma.filmes_projeto_2.findUnique({
-                    where: {
-                        "id_filmes": Number(numero)
+        if (valida_token(token)) {
+            try {
+                // O if vai verificar se a algum projeto dentro do banco ou não
+                if (await prisma.filmes_projeto_2.count() != 0 && isNumeric(numero) == true) {
+    
+                    let dados = await prisma.filmes_projeto_2.findUnique({
+                        where: {
+                            "id_filmes": Number(numero)
+                        }
+                    })
+    
+                    if (dados != null) {
+                        response.send(dados)
+                    } else {
+                        response.send(false)
                     }
-                })
-
-                if (dados != null) {
-                    response.send(dados)
+    
                 } else {
                     response.send(false)
                 }
-
-            } else {
+        
+            } catch (e) {
+                console.log(e)
                 response.send(false)
             }
-    
-        } catch (e) {
-            console.log(e)
+        } else {
             response.send(false)
         }
     }
@@ -234,19 +237,25 @@ app.get("/avaliacao_user", async (request, response) => {
 // rota de contar as estrelas que um filme possui
 app.get("/votos", async (request, response) => {
     const id_filme = parseInt(request.query.id)
+    const token = request.query.token
 
     async function main() {
-        try{
-            const dados = await prisma.estrelas_projeto_2.count({
-                where: {
-                    id_filmes: id_filme
-                }
-            })
-            
-            response.send(dados.toString())
+        if (valida_token(token) == true) {
+            try{
+                const dados = await prisma.estrelas_projeto_2.count({
+                    where: {
+                        id_filmes: id_filme
+                    }
+                })
+                
+                response.send(dados.toString())
+    
+            } catch(e) {
+                response.send("0")
+            }
 
-        } catch(e) {
-            response.send("0")
+        } else {
+            response.send(false)
         }
     }
 
@@ -269,7 +278,7 @@ app.post("/ativa_desativa_estrela", (request, response) => {
             await prisma.estrelas_projeto_2.deleteMany({
                 where: {
                     id_filmes: id_filme,
-                    email: email
+                    email: email1
                 }
             })
 
@@ -329,35 +338,41 @@ app.get("/alterar_nome", (request, response) => {
 // Função adicionar os filmes na lista de favorios
 
 app.get("/lista", (request, response) => {
+    const token = request.query.token
     const email = request.query.email
 
     async function main()
     {
-        try {
-            const dados_lista = await prisma.estrelas_projeto_2.findMany({
-                where: {
-                    email: email
-                }
-            })
-    
-            const lista_filmes = []
-    
-            let dados
-    
-            for (let i = 0; i < dados_lista.length; i++) {
-                dados = await prisma.filmes_projeto_2.findMany({
+        if (valida_token(token)) {
+            try {
+                const dados_lista = await prisma.estrelas_projeto_2.findMany({
                     where: {
-                        id_filmes: dados_lista[i].id_filmes
+                        email: email
                     }
                 })
+        
+                const lista_filmes = []
+        
+                let dados
+        
+                for (let i = 0; i < dados_lista.length; i++) {
+                    dados = await prisma.filmes_projeto_2.findMany({
+                        where: {
+                            id_filmes: dados_lista[i].id_filmes
+                        }
+                    })
+        
+                    lista_filmes.push(dados)
+                }
+        
+                response.send(lista_filmes)
     
-                lista_filmes.push(dados)
+            } catch (e) {
+                console.log(e)
+                response.send([])
             }
-    
-            response.send(lista_filmes)
 
-        } catch (e) {
-            console.log(e)
+        } else {
             response.send([])
         }
     }

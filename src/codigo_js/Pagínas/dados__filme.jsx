@@ -45,7 +45,7 @@ export default function Dados__filme()
                 }
             })
         
-            fetch(`http://localhost:3000/votos?id=${nome_filme}`).then(dados2 => dados2.json()).then(dados2 => {
+            fetch(`http://localhost:3000/votos?id=${nome_filme}&token=${localStorage.getItem("token")}`).then(dados2 => dados2.json()).then(dados2 => {
                 setDados(copiar => ({
                     ...copiar,
                     avalia: dados2
