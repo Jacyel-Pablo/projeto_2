@@ -1,1 +1,1 @@
-http://localhost:3000/validar_token?token=ajaakak
+http://localhost:3000/pegar_filmes_da_tabela?numeros=2&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbF9lbmNyeXB0IjoiamFjeWVsbC5tb3VyYUBnbWFpbC5jb20iLCJpYXQiOjE3MzE2NzkzMjYsImV4cCI6MTczMTY4MjkyNn0.WGa4hYfJyp1ZArFlq_Cmiko0EJj3WM6Ii2DN_52cbj8

@@ -84,7 +84,7 @@ export default function User__config()
     // adicionar os filmes Lista de Favoritos e o nome do usúario
     function favoritos()
     {
-        fetch(`http://localhost:3000/lista?email=${localStorage.getItem("email")}`).then(infor => infor.json())
+        fetch(`http://localhost:3000/lista?email=${localStorage.getItem("email")}&token=${localStorage.getItem("token")}`).then(infor => infor.json())
         .then(infor => {
             var filmes_list = []
             for (let i = 0; i < infor.length; i++) {
@@ -137,6 +137,10 @@ export default function User__config()
                             <path d="M3463 2865 c-63 -50 -358 -357 -361 -375 -3 -15 2 -20 20 -20 31 0 401 370 396 396 -5 26 -20 26 -55 -1z"/>
                         </g>
                     </svg>
+                </div>
+
+                <div className="w-100 text-center">
+                    <input type="button" value="Sair da conta" className="btn text-white bg-danger btn_sair_conta mt-5" onClick={() => {localStorage.removeItem("token"); window.location.href = "/"}}/>
                 </div>
             </section>
 

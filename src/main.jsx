@@ -23,26 +23,20 @@ function Validacao()
   // por padrão o useState começa com uma tela preta
   const [pag, setPag] = useState(<div className="tela_preta"></div>)
 
-  // São duas pagínas que são uma exerção neste if
-  if (window.location.pathname != "/" && window.location.pathname != "/criar_conta.html") {
+  // Validando o token se o token for positivo ele pegar a 
+  // url e colocar no mapeamento das pagínas
+  // e renderizar se não ele voltar para a pagína de login
+  fetch(`http://localhost:3000/validar_token?token=${localStorage.getItem("token")}`).then(dados => dados.json()).then(dados => {
+    if (dados == true) {
+      setPag(map_pag[window.location.pathname])
 
-    // Validando o token se o token for positivo ele pegar a 
-    // url e colocar no mapeamento das pagínas
-    // e renderizar se não ele voltar para a pagína de login
-    fetch(`http://localhost:3000/validar_token?token=${localStorage.getItem("token")}`).then(dados => dados.json()).then(dados => {
-      if (dados == true) {
-        setPag(map_pag[window.location.pathname])
+    } else {
+      window.location.href = "/"
+    }
+  })
 
-      } else {
-        window.location.href = "/"
-      }
-    })
-
-    // Retorna a pag do useState
-    return pag
-
-  }
-
+  // Retorna a pag do useState
+  return pag
 }
 
 const rotas = createBrowserRouter([

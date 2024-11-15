@@ -21,6 +21,8 @@ model usuario_projeto_2{
   apelido String @unique
   senha String
   Estrelas estrelas_projeto_2[]
+  comentarios_email comentarios_filmes_projeto_2[] @relation("email1")
+  comentarios_apelido comentarios_filmes_projeto_2[] @relation("apelido2")
 }
 
 // Tabela de estrelas em que o usúario clicou na estrela
@@ -38,5 +40,20 @@ model filmes_projeto_2{
   capa String
   nome String
   sinopse String
+
   estrela estrelas_projeto_2[]
+  comentario comentarios_filmes_projeto_2[]
+}
+
+model comentarios_filmes_projeto_2{
+  id Int @unique @default(autoincrement()) @id
+  email String
+  id_filmes Int
+  apelido String
+  comentario String
+  data DateTime
+
+  filmes filmes_projeto_2 @relation(fields: [id_filmes], references: [id_filmes])
+  usuario usuario_projeto_2 @relation("email1", fields: [email], references: [email])
+  usuario_apelido usuario_projeto_2 @relation("apelido2", fields: [apelido], references: [apelido])
 }

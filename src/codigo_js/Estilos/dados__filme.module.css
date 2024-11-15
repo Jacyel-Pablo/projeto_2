@@ -1,12 +1,13 @@
 .corpo{
     height: 100vh;
     background-color: black;
+    overflow: hidden;
 }
 .parte1{
     height: 100vh;
     width: 100vw;
     display: grid;
-    grid-template-columns: 30% 68%;
+    grid-template-columns: 30% 34% 36%;
     text-align: left;
 }
 .foto{
@@ -25,9 +26,10 @@
 }
 .sinopse{
     text-align: justify;
-    margin-top: 9em;
-    height: 25em;
+    height: 100%;
     width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .estrela1{
     height: 35px;
@@ -36,11 +38,14 @@
     margin-left: 3.5vw;
 }
 .sinopse1{
+    margin-top: 3.5em;
     color: white;
 }
 .sinopse__txt{
     color: white;
     margin-top: 2em;
+    width: 90%;
+    margin-left: 2%;
     font-size: 1.3em;
 }
 
@@ -52,4 +57,68 @@
     margin-left: 1vw;
     font-size: 150%;
     color: white;
+}
+
+/* Parte dos comentarios do usúario */
+.comentario_box{
+    color: white;
+    height: 100%;
+    width: 100%;
+}
+.comentario_box1{
+    margin-top: 2%;
+    height: 10.5%;
+    display: flex;
+}
+.comentarios_usuarios{
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 8.85em;
+    height: 25em;
+    width: 95%;
+    border: 2px solid;
+    border-radius: 1em;
+}
+.comentario_campo{
+    height: 100%;
+    width: 75%;
+    padding: 20px;
+    border-radius: 1em;
+    color: white;
+    background-color: black;
+    font-size: 120%;
+}
+.comentario_botao_enviar{
+    background-color: rgb(94, 93, 93);
+    border-radius: 1em;
+    width: 20%;
+}
+
+/* Campo onde os comentarios vão aparace */
+
+.container_comentarios{
+    margin-top: 5%;
+    margin-left: 5%;
+    background-color: rgb(94, 93, 93);
+    /* height: 40%; */
+    width: 90%;
+    border-radius: 0.9em;
+}
+.container_comentarios_infor_user{
+    display: flex;
+}
+.container_comentarios_infor_user_foto{
+    width: 45px;
+    margin: 1% 4%;
+    border-radius: 2em;
+}
+.container_comentarios_infor_user_nome{
+    margin: 3% 0px;
+}
+.container_comentarios_div{
+    width: 90%;
+    margin: 0 auto;
+}
+.container_comentarios_data{
+    margin-left: 5%;
 }

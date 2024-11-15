@@ -150,34 +150,37 @@ app.get("/pegar_index_ultimo_filme", async (request, response) => {
 })
 
 app.get("/pegar_filmes_da_tabela", async (request, response) => {
+    const numero = request.query.numeros
+    const token = request.query.token
 
     async function main()
     {
-
-        try {
-            const numero = request.query.numeros
-
-            // O if vai verificar se a algum projeto dentro do banco ou não
-            if (await prisma.filmes_projeto_2.count() != 0 && isNumeric(numero) == true) {
-
-                let dados = await prisma.filmes_projeto_2.findUnique({
-                    where: {
-                        "id_filmes": Number(numero)
+        if (valida_token(token)) {
+            try {
+                // O if vai verificar se a algum projeto dentro do banco ou não
+                if (await prisma.filmes_projeto_2.count() != 0 && isNumeric(numero) == true) {
+    
+                    let dados = await prisma.filmes_projeto_2.findUnique({
+                        where: {
+                            "id_filmes": Number(numero)
+                        }
+                    })
+    
+                    if (dados != null) {
+                        response.send(dados)
+                    } else {
+                        response.send(false)
                     }
-                })
-
-                if (dados != null) {
-                    response.send(dados)
+    
                 } else {
                     response.send(false)
                 }
-
-            } else {
+        
+            } catch (e) {
+                console.log(e)
                 response.send(false)
             }
-    
-        } catch (e) {
-            console.log(e)
+        } else {
             response.send(false)
         }
     }
@@ -234,19 +237,25 @@ app.get("/avaliacao_user", async (request, response) => {
 // rota de contar as estrelas que um filme possui
 app.get("/votos", async (request, response) => {
     const id_filme = parseInt(request.query.id)
+    const token = request.query.token
 
     async function main() {
-        try{
-            const dados = await prisma.estrelas_projeto_2.count({
-                where: {
-                    id_filmes: id_filme
-                }
-            })
-            
-            response.send(dados.toString())
+        if (valida_token(token) == true) {
+            try{
+                const dados = await prisma.estrelas_projeto_2.count({
+                    where: {
+                        id_filmes: id_filme
+                    }
+                })
+                
+                response.send(dados.toString())
+    
+            } catch(e) {
+                response.send("0")
+            }
 
-        } catch(e) {
-            response.send("0")
+        } else {
+            response.send(false)
         }
     }
 
@@ -269,7 +278,7 @@ app.post("/ativa_desativa_estrela", (request, response) => {
             await prisma.estrelas_projeto_2.deleteMany({
                 where: {
                     id_filmes: id_filme,
-                    email: email
+                    email: email1
                 }
             })
 
@@ -359,6 +368,76 @@ app.get("/lista", (request, response) => {
         } catch (e) {
             console.log(e)
             response.send([])
+        }
+    }
+
+    main().then(async () => await prisma.$disconnect())
+    .catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
+})
+
+// Sistema de comentarios
+
+// Adicionado os dados no servidor
+
+app.post("/enviar_comentarios", async (request, response) => {
+    const email = request.query.email
+    const id_filmes = Number(request.query.id_filmes)
+    const apelido = request.query.apelido
+    const comentario = request.query.comentario
+    const data = new Date().toISOString()
+
+    async function main()
+    {
+        try{
+            await prisma.comentarios_filmes_projeto_2.create({
+                data: {
+                    "email": email,
+                    "id_filmes": id_filmes,
+                    "apelido": apelido,
+                    "comentario": comentario,
+                    "data": data
+                }
+            })
+    
+        } catch (e) {
+            console.log("Erro", e)
+        }
+    }
+
+    main().then(async () => await prisma.$disconnect())
+    .catch(async (e) => {
+        console.log(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
+})
+
+app.get("/lista_comentarios", (request, response) => {
+    const filme = Number(request.query.filme)
+
+    async function main()
+    {
+        try{
+            const lista_comentarios = await prisma.comentarios_filmes_projeto_2.findMany({
+                where: {
+                    id_filmes: filme
+                }
+            })
+
+            if (lista_comentarios.length == 0) {
+                response.send(false)
+
+            } else {
+                response.send(lista_comentarios)
+            }
+
+        } catch (e) {
+            console.log(e)
+            response.send(false)
         }
     }
 
