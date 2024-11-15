@@ -338,35 +338,41 @@ app.get("/alterar_nome", (request, response) => {
 // Função adicionar os filmes na lista de favorios
 
 app.get("/lista", (request, response) => {
+    const token = request.query.token
     const email = request.query.email
 
     async function main()
     {
-        try {
-            const dados_lista = await prisma.estrelas_projeto_2.findMany({
-                where: {
-                    email: email
-                }
-            })
-    
-            const lista_filmes = []
-    
-            let dados
-    
-            for (let i = 0; i < dados_lista.length; i++) {
-                dados = await prisma.filmes_projeto_2.findMany({
+        if (valida_token(token)) {
+            try {
+                const dados_lista = await prisma.estrelas_projeto_2.findMany({
                     where: {
-                        id_filmes: dados_lista[i].id_filmes
+                        email: email
                     }
                 })
+        
+                const lista_filmes = []
+        
+                let dados
+        
+                for (let i = 0; i < dados_lista.length; i++) {
+                    dados = await prisma.filmes_projeto_2.findMany({
+                        where: {
+                            id_filmes: dados_lista[i].id_filmes
+                        }
+                    })
+        
+                    lista_filmes.push(dados)
+                }
+        
+                response.send(lista_filmes)
     
-                lista_filmes.push(dados)
+            } catch (e) {
+                console.log(e)
+                response.send([])
             }
-    
-            response.send(lista_filmes)
 
-        } catch (e) {
-            console.log(e)
+        } else {
             response.send([])
         }
     }
