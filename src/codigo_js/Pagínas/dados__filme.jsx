@@ -140,10 +140,6 @@ export default function Dados__filme()
     async function botao_enviar()
     {
 
-        await fetch(`http://localhost:3000/enviar_comentarios?email=${localStorage.getItem("email")}&id_filmes=${localStorage.getItem("filme")}&apelido=${localStorage.getItem("apelido")}&comentario=${dados.comentario_user}`, {
-            method: "POST"
-        })
-
         contado_index += 1
 
         const add_comentario = []
@@ -162,10 +158,16 @@ export default function Dados__filme()
             </div>
         )
 
+        console.log(add_comentario)
+
         setDados((copiar) => ({
             ...copiar,
             lista_comentarios: add_comentario
         }))
+
+        await fetch(`http://localhost:3000/enviar_comentarios?email=${localStorage.getItem("email")}&id_filmes=${localStorage.getItem("filme")}&apelido=${localStorage.getItem("apelido")}&comentario=${dados.comentario_user}`, {
+            method: "POST"
+        })
 
         // console.log(dados.lista_comentarios)
     }
