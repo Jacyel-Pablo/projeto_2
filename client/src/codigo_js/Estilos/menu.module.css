@@ -1,0 +1,59 @@
+.body_pag{
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #000000;
+}
+.lancamento{
+    margin-top: 9em;
+}
+.secoes{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+/* filmes em lançamentos */
+.filmes{
+    width: 24vw;
+    text-align: left;
+}
+.posters{
+    height: 350px;
+    width: 250px;
+    margin-left: 14.5%;
+}
+.nome__filme1{
+    color: blue;
+    text-align: center;
+}
+
+.estrela{
+    height: 35px;
+    width: 35px;
+    /* margin-top: 90vh; */
+    margin-left: 7vw;
+}
+.avaliacao{
+    display: inline-block;
+    position: relative;
+    margin-left: 1em;
+    color: white;
+}
+.titulo1{
+    color: red;
+}
+.titulo2{
+    color: yellow;
+}
+.titulo3{
+    color: rgb(1, 214, 1);
+}
+.calendario{
+    margin-top: 10vh;
+    text-align: center;
+    height: 60.5em;
+    width: 64vw;
+}
+/* a{
+    color: black;
+} */
