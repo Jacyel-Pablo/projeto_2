@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
+import { z } from "zod"
 
 // Função que verificar se o valor do numero da rota "pegar_filmes_da_tabela" e número ou não
 function isNumeric(str)
@@ -36,4 +37,20 @@ function valida_token(token)
     }
 }
 
-export {isNumeric, criar_token, valida_token}
+function validate(esquema)
+{
+    return (request, response, next) => {
+        try{
+            esquema.parse({
+                query: request.query
+            })
+
+            next()
+
+        } catch (e) {
+            response.send(false)
+        }
+    }
+}
+
+export {isNumeric, criar_token, valida_token, validate}

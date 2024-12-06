@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client"
-import express from "express"
+import express, { query } from "express"
 import cors from "cors"
 import bcrypt from "bcrypt"
 import dotenv from "dotenv"
-import { isNumeric, criar_token, valida_token } from "./middleware.js"
+import { z } from "zod"
+import { isNumeric, criar_token, valida_token, validate } from "./middleware.js"
 
 const app = express()
 
@@ -23,7 +24,18 @@ app.use(
 
 const prisma = new PrismaClient()
 
-app.post("/submit", async (request, response) => {
+app.post("/submit",
+    validate(
+        z.object({
+            query : z.object({
+                email: z.string().email().min(5),
+                apelido: z.string().min(5),
+                senha: z.string().min(2)
+            })
+        })
+    )
+
+, async (request, response) => {
     const email = request.query.email
     const apelido = request.query.apelido
     const senha = await bcrypt.hash(request.query.senha, Number(process.env.PULO))
@@ -49,7 +61,17 @@ app.post("/submit", async (request, response) => {
 })
 
 // Validar login e senha
-app.get("/valida", async (request, response) => { 
+app.get("/valida", 
+    validate(
+        z.object({
+            query : z.object({
+                email: z.string().email().min(5),
+                senha: z.string().min(2)
+            })
+        })
+    )
+
+, async (request, response) => { 
     const senha_user = request.query.senha
 
     async function main()

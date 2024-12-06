@@ -28,7 +28,7 @@ export default function Index()
                     email: "",
                     senha: ""
                 })
-                // alert("Email ou senha incorretos")
+                alert("Email ou senha incorretos")
     
             } else {
                 localStorage.setItem("token", dados1.email_encrypt)
