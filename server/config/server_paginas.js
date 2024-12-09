@@ -216,6 +216,29 @@ app.get("/pegar_filmes_da_tabela", async (request, response) => {
     })
 })
 
+// Rota criada para procurar de filmes do campo de buscar do menu.jsx
+
+app.get("/busca_filmes", async (request, response) => {
+    const nome = request.query.nome
+
+    let filmes = await prisma.filmes_projeto_2.findMany({
+
+        where: {
+            nome: {
+                startsWith: nome,
+                mode: "insensitive"
+            }
+        },
+    })
+
+    if (filmes.length == 0) {
+        response.send(false)
+
+    } else {
+        response.send(filmes)
+    }
+})
+
 // rotas dados__filme.html
 // rota de avaliação de filmes visualizar quantas estrelas um filme tem
 app.get("/avaliacao_user", async (request, response) => {
@@ -325,7 +348,14 @@ app.post("/ativa_desativa_estrela", (request, response) => {
 // user_config.js altera nome
 
 // Função de alterar
-app.get("/alterar_nome", (request, response) => {
+app.get("/alterar_nome", validate(
+    z.object({
+        query: z.object({
+            nome: z.string().min(8)
+        })
+    })
+
+), (request, response) => {
     const email = request.query.email
     const nome = request.query.nome
 
