@@ -40,13 +40,7 @@
     color: white;
 }
 .titulo1{
-    color: red;
-}
-.titulo2{
-    color: yellow;
-}
-.titulo3{
-    color: rgb(1, 214, 1);
+    color: white;
 }
 .calendario{
     margin-top: 10vh;
@@ -57,3 +51,22 @@
 /* a{
     color: black;
 } */
+
+@media only screen and (max-width: 800px) {
+    .secoes{
+        display: block;
+        grid-template-columns: 0%;
+    }
+    .filmes{
+        margin: 0px 0px;
+        justify-items: center;
+        text-align: center;
+        width: 100%;
+    }
+    .posters{
+        margin: 0px 0px;
+    }
+    .estrela{
+        margin: 0px 0px;
+    }
+}

@@ -54,8 +54,6 @@ export default function User__config()
                     }))
 
                 } else {
-                    const nome_valor = dados.input_valor
-                    console.log(nome_valor.length)
                     if (dados.input_valor.length <= 2) {
                         alert("O nome não pode ter menos de 3 caracteres")
 
@@ -119,6 +117,15 @@ export default function User__config()
         nome_user()
     }
 
+    function log_out()
+    {
+        localStorage.removeItem("apelido")
+        localStorage.removeItem("email")
+        localStorage.removeItem("filme")
+        localStorage.removeItem("token")
+        window.location.href = "/"
+    }
+
     useEffect(() => favoritos(), [])
 
     return(
@@ -147,7 +154,7 @@ export default function User__config()
                 </form>
 
                 <div className="w-100 text-center">
-                    <input type="button" value="Sair da conta" className="btn text-white bg-danger btn_sair_conta mt-5" onClick={() => {localStorage.removeItem("token"); window.location.href = "/"}}/>
+                    <input type="button" value="Sair da conta" className="btn text-white bg-danger btn_sair_conta mt-5" onClick={() => log_out()}/>
                 </div>
             </section>
 

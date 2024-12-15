@@ -2,6 +2,7 @@
 .menu{
     display: flex;
     align-items: center;
+    height: 17%;
     background-color: rgb(201, 35, 35);
     position: fixed;
     top: 0;
@@ -32,6 +33,11 @@
     position: fixed;
     right: 0;
 }
+.pipoca{
+    margin-top: 8%;
+    height: 96%;
+    width: 96%;
+}
 .perfil_link{
     background-color: green;
     /* height: 3em; */
@@ -47,4 +53,29 @@
     width: 3em;
     right: 0;
     margin-right: 20px;
+}
+
+@media only screen and (max-width: 800px) {
+    .menu{
+        height: 13%;
+    }
+    .logo__cinetime{
+        margin-left: 40%;
+    }
+    .campo__busca{
+        height: 7%;
+        width: 52%;
+        font-size: 128%;
+        margin-right: 20%;
+    }
+    .pipoca{
+        height: 0px;
+        width: 0px;
+    }
+    .perfil{
+        margin-top: -1.5%;
+        margin-right: 2.5%;
+        height: 4em;
+        width: 4em;
+    }
 }

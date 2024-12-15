@@ -17,3 +17,15 @@
 .cor_texto{
     color: white;
 }
+@media only screen and (max-width: 800px) {
+    .container_formulario{
+        width: 100vw;
+    }
+    .container_formulario1{
+        width: 100%;
+        display: block;
+    }
+    .formulario{
+        width: 80vw;
+    }
+}

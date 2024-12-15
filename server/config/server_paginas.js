@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-import express, { query } from "express"
+import express from "express"
 import cors from "cors"
 import bcrypt from "bcrypt"
 import dotenv from "dotenv"
@@ -218,7 +218,13 @@ app.get("/pegar_filmes_da_tabela", async (request, response) => {
 
 // Rota criada para procurar de filmes do campo de buscar do menu.jsx
 
-app.get("/busca_filmes", async (request, response) => {
+app.get("/busca_filmes", validate(z.object({
+    query: z.object({
+        nome: z.string().min(1)
+    })
+
+}))
+, async (request, response) => {
     const nome = request.query.nome
 
     let filmes = await prisma.filmes_projeto_2.findMany({
@@ -230,6 +236,20 @@ app.get("/busca_filmes", async (request, response) => {
             }
         },
     })
+
+    const votos = await prisma.estrelas_projeto_2.findMany({
+        where: {
+            id_filmes: filmes[0].id_filmes
+        }
+    })
+
+    if (votos.length == 0) {
+        filmes[0]["votos"] = 0
+
+    } else {
+        filmes[0]["votos"] = votos.length
+
+    }
 
     if (filmes.length == 0) {
         response.send(false)

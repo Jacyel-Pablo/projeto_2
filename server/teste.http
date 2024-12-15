@@ -1,1 +1,6 @@
-http://localhost:3000/busca_filmes?nome=zo
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbF9lbmNyeXB0IjoiamFjeWVsbC5tb3VyYUBnbWFpbC5jb20iLCJpYXQiOjE3MzQxNzQ5ODAsImV4cCI6MTczNDE3ODU4MH0.uhmHb6VI4lS3nYoM0XKkcR3wRGhco9FtZOZKFcRe5a0
+
+http://localhost:3000/busca_filmes?nome=li&token={{token}}
+
+###
+http://localhost:3000/votos?id=1&token={{token}}

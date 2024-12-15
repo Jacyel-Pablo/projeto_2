@@ -122,3 +122,51 @@
 .container_comentarios_data{
     margin-left: 5%;
 }
+
+@media only screen and (max-width: 800px) {
+    .corpo{
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .parte1{
+        display: block;
+        grid-template-columns: 0%;
+    }
+    .poster{
+        height: 350px;
+        width: 250px;
+    }
+    .infor__filme{
+        text-align: center;
+    }
+    .estrela1{
+        margin-left: 40%;
+    }
+    .sinopse{
+        /* background-color: blue; */
+        border-top: 3px solid;
+        border-color: white;
+        height: auto;
+        overflow: hidden;
+    }
+    .sinopse1{
+        margin-top: 2vh;
+        margin-left: 5%;
+    }
+    .sinopse__txt{
+        margin-left: 5%;
+        margin-bottom: 2%;
+    }
+
+    .comentario_box{
+        border-top: 3px solid;
+        border-color: white;
+    }
+    .comentarios_usuarios{
+        margin-left: 3%;
+        margin-top: 3%;
+    }
+    .comentario_campo{
+        margin-left: 3%;
+    }
+}
