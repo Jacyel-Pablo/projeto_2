@@ -5,6 +5,7 @@ import bcrypt from "bcrypt"
 import dotenv from "dotenv"
 import { z } from "zod"
 import { isNumeric, criar_token, valida_token, validate } from "./middleware.js"
+import nodemailer from "nodemailer"
 
 const app = express()
 
@@ -19,6 +20,37 @@ app.use(
       preflightContinue: false,
     })
 );
+
+// enviar email
+
+function send_email(email_user, titulo, texto, html)
+{
+    nodemailer.createTestAccount((err, account) => {
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.ethereal.email',
+            port: 587,
+            secure: false,
+            auth: {
+                user: account.user,
+                pass: account.pass
+            }
+        });
+
+        async function main() {
+            const infor = await transporter.sendMail({
+              from: '"ShowTime" <showtime@ethereal.email>',
+              to: email_user,
+              subject: titulo,
+              text: texto,
+              html: html,
+            });
+          
+            console.log(`Link de email enviado ${nodemailer.getTestMessageUrl(infor)}`);
+          }
+          
+          main().catch(console.error);
+    });
+}
 
 // Variavel do prisma
 
@@ -41,13 +73,22 @@ app.post("/submit",
     const senha = await bcrypt.hash(request.query.senha, Number(process.env.PULO))
 
     async function main() {
-        await prisma.usuario_projeto_2.create({
-            data: {
-                "email": email,
-                "apelido": apelido,
-                "senha": senha
-            }
-        })
+        try{
+            await prisma.usuario_projeto_2.create({
+                data: {
+                    "email": email,
+                    "apelido": apelido,
+                    "senha": senha
+                }
+            })
+
+            send_email(email, "Criação da conta ShowTime", "Sua conta foi criada com sucesso", `<h1>Sua conta foi criada com sucesso</h1>
+                                                                                                <button style=""background-color": "red";><a style="text-decoration": "none"; "color": "white"" href="http://localhost:5173">Faça login</a></button>`)
+
+        } catch (e) {
+            console.log(e)
+            alert("Não foi possivel criar sua conta\nTente novamente mas tarde")
+        }
     }
 
     main().then(async () => {
@@ -85,6 +126,8 @@ app.get("/valida",
                 delete dados.senha
 
                 dados["email_encrypt"] = criar_token({email_encrypt: dados.email})
+
+                send_email(request.query.email, "Acesso a sua conta do ShowTime", "Olá detectamos um acesso a sua conta do ShowTime", "<h1>Olá detectamos um acesso a sua conta do ShowTime</h1>")
 
                 response.send(dados)
             } else {
