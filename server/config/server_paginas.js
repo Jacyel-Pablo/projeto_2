@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client"
-import express from "express"
+import express, { response } from "express"
 import cors from "cors"
 import bcrypt from "bcrypt"
 import dotenv from "dotenv"
 import { z } from "zod"
 import { isNumeric, criar_token, valida_token, validate } from "./middleware.js"
-import nodemailer from "nodemailer"
+import { send_email } from "./controllers.js"
+import { router } from "./rotas__das__imagens.js"
 
 const app = express()
 
@@ -14,43 +15,12 @@ app.use(express.json())
 app.use(
     cors({
       origin: '*',
-      methods: 'GET',
+      methods: 'GET, POST, PUT',
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true,
       preflightContinue: false,
     })
 );
-
-// enviar email
-
-function send_email(email_user, titulo, texto, html)
-{
-    nodemailer.createTestAccount((err, account) => {
-        let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
-            secure: false,
-            auth: {
-                user: account.user,
-                pass: account.pass
-            }
-        });
-
-        async function main() {
-            const infor = await transporter.sendMail({
-              from: '"ShowTime" <showtime@ethereal.email>',
-              to: email_user,
-              subject: titulo,
-              text: texto,
-              html: html,
-            });
-          
-            console.log(`Link de email enviado ${nodemailer.getTestMessageUrl(infor)}`);
-          }
-          
-          main().catch(console.error);
-    });
-}
 
 // Variavel do prisma
 
@@ -230,9 +200,12 @@ app.get("/pegar_filmes_da_tabela", async (request, response) => {
                             "id_filmes": Number(numero)
                         }
                     })
+
+                    delete dados.capa
     
-                    if (dados != null) {
+                    if (dados != null && dados.autorizar != null) {
                         response.send(dados)
+
                     } else {
                         response.send(false)
                     }
@@ -257,6 +230,42 @@ app.get("/pegar_filmes_da_tabela", async (request, response) => {
         await prisma.$disconnect()
         process.exit(1)
     })
+})
+
+// Pegar capa do filme
+
+app.get("/pegar_capa_do_filme", async (request, response) => {
+    const numero = request.query.numeros
+    const token = request.query.token
+
+    if (valida_token(token)) {
+        try {
+            // O if vai verificar se a algum projeto dentro do banco ou não
+            if (await prisma.filmes_projeto_2.count() != 0 && isNumeric(numero) == true) {
+                const capa = await prisma.filmes_projeto_2.findUnique({
+                    where: {
+                        id_filmes: Number(numero)
+                    }
+                })
+
+                if (capa != null && capa.autorizar != null) {
+                    response.sendFile(capa.capa)
+
+                } else {
+                    response.status(404).send(false)
+                }
+
+            } else {
+                response.status(404).send(false)
+            }
+
+        } catch (e) {
+            response.status(404).send(false)
+        }
+
+    } else {
+        response.status(404).send(false)
+    }
 })
 
 // Rota criada para procurar de filmes do campo de buscar do menu.jsx
@@ -536,6 +545,10 @@ app.post("/enviar_comentarios", async (request, response) => {
         process.exit(1)
     })
 })
+
+// Rotas das imagens
+
+app.use(router)
 
 app.get("/lista_comentarios", (request, response) => {
     const filme = Number(request.query.filme)

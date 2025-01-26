@@ -4,3 +4,10 @@ http://localhost:3000/busca_filmes?nome=li&token={{token}}
 
 ###
 http://localhost:3000/votos?id=1&token={{token}}
+
+###
+http://localhost:3000/pegar__foto?email=jacyell.moura@gmail.com
+
+### Validar foto
+
+http://localhost:3000/validar__foto?email=jacyell.moura@gmail.com

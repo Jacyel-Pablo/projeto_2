@@ -15,7 +15,10 @@ export default function User__config()
         input_width: {width: "0px"},
         input_valor: "",
 
-        nome: "A Lenda das Lendas"
+        nome: "A Lenda das Lendas",
+
+        foto_id: 0,
+        foto: "https://media.tenor.com/Lk6mMX3yHqUAAAAd/little-witch-academia-atsuko-kagari.gif"
     })
 
     function adicionar_nome_input(e)
@@ -91,6 +94,7 @@ export default function User__config()
     {
         fetch(`http://localhost:3000/lista?email=${localStorage.getItem("email")}&token=${localStorage.getItem("token")}`).then(infor => infor.json())
         .then(infor => {
+
             var filmes_list = []
             for (let i = 0; i < infor.length; i++) {
                 filmes_list.push(
@@ -115,6 +119,7 @@ export default function User__config()
         
         // Nome do usúario
         nome_user()
+
     }
 
     function log_out()
@@ -126,7 +131,43 @@ export default function User__config()
         window.location.href = "/"
     }
 
-    useEffect(() => favoritos(), [])
+    function alterar_foto_perfil(e)
+    {
+        const form = new FormData()
+        form.append("foto", e.target.files[0])
+        form.append("email", localStorage.getItem("email"))
+
+        // Enviar o upload do arquivo da foto
+        fetch(`http://localhost:3000/upload__foto__perfil`, {
+            method: "PUT",
+            body: form
+
+        })
+
+        setTimeout(() => {
+            setDados(copiar => ({
+                ...copiar,
+                foto_id: dados.foto_id + 1,
+                foto: `http://localhost:3000/pegar__foto?email=${localStorage.getItem("email")}&id=${dados.foto_id + 1}`
+            }))
+
+        }, 900)
+
+    }
+
+    useEffect(() => {favoritos();
+        // Carregando imagem de perfil do usuário
+        
+        // A variavel "dados1" retorna true ser já tive uma foto no banco e falso se não exitir
+        fetch(`http://localhost:3000/validar__foto?email=${localStorage.getItem("email")}`).then(dados1 => dados1.json()).then(dados1 => {
+            if (dados1 == true) {
+                setDados(copiar => ({
+                    ...copiar,
+                    foto: `http://localhost:3000/pegar__foto?email=${localStorage.getItem("email")}`
+                }))
+            }
+            
+        })}, [])
 
     return(
         <div className={style.corpo}>
@@ -136,7 +177,13 @@ export default function User__config()
                 </Link>
 
                 <div className={style.nome__config}>
-                    <img className={style.perfill} src="https://media.tenor.com/Lk6mMX3yHqUAAAAd/little-witch-academia-atsuko-kagari.gif" alt="Perfil"/>
+                    <form>
+
+                        <img className={style.perfill} src={dados.foto} alt="Perfil"/>
+
+                        <input onChange={(e) => alterar_foto_perfil(e)} className={style.select_img} type="file" name="foto" />
+
+                    </form>
                 </div>
 
                 <form className={style.nome__config}>                    
@@ -152,6 +199,12 @@ export default function User__config()
                         </g>
                     </svg>
                 </form>
+
+                <div className={style.link__ajudar}>
+                    <a href="/ajudar">Você pode nos ajudar a adicionar novos filmes <br/>
+                                      ao nosso catalágo</a>
+
+                </div>
 
                 <div className="w-100 text-center">
                     <input type="button" value="Sair da conta" className="btn text-white bg-danger btn_sair_conta mt-5" onClick={() => log_out()}/>

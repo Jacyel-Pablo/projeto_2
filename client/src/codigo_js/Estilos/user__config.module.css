@@ -21,7 +21,6 @@
     margin: 1em 1em;
 }
 .perfill{
-    background-color: aqua;
     border-radius: 15em;
     margin: 0.2em 5%;
     height: 50vh;
@@ -29,6 +28,12 @@
     width: 70%;
     object-fit: cover;
     min-width: 330px;
+}
+.select_img{
+    position: fixed;
+    margin: 0em -26.3%;
+    height: 50vh;
+    opacity: 0;
 }
 .nome__config{
     text-align: center;
@@ -52,6 +57,9 @@
     color: aqua;
     height: 2em;
     width: 2em
+}
+.link__ajudar{
+    text-align: center;
 }
 
 /* Box 2 */
@@ -110,5 +118,13 @@
     }
     .box1{
         justify-items: center;
+    }
+    .select_img{
+        height: 20vh;
+        min-height: 110px;
+        width: 20%;
+        min-width: 130px;
+        margin: 0em -29%;
+
     }
 }

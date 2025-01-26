@@ -7,7 +7,7 @@ import Criar_conta from './codigo_js/Pagínas/criar_conta.jsx';
 import Menu from './codigo_js/Pagínas/menu.jsx';
 import Dados__filme from './codigo_js/Pagínas/dados__filme.jsx';
 import User__config from './codigo_js/Pagínas/user__config.jsx';
-import Modo_dev from './codigo_js/Pagínas/modo_dev.jsx';
+import Ajudar from './codigo_js/Pagínas/ajudar__comunitaria.jsx';
 import Pagina_arquivo_nao_encontrado from './codigo_js/Pagínas/pagina_arquivo_nao_encontrado.jsx';
 import { useState } from 'react';
 import './index.css'
@@ -15,7 +15,8 @@ import './index.css'
 const map_pag = {
   "/menu.html": <Menu/>,
   "/dados__filme.html": <Dados__filme/>,
-  "/user__config.html": <User__config/>
+  "/user__config.html": <User__config/>,
+  "/ajudar": <Ajudar/>
 }
 
 function Validacao()
@@ -61,8 +62,8 @@ const rotas = createBrowserRouter([
     element: <Validacao/>
   },
   {
-    path: "/.dev",
-    element: <Modo_dev/>
+    path: "/ajudar",
+    element: <Validacao/>
   },
   {
     path: "*",

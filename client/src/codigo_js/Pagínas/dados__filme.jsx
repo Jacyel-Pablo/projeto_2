@@ -19,7 +19,9 @@ export default function Dados__filme()
 
         comentario_user: "",
 
-        logo: "ShowTime"
+        logo: "ShowTime",
+
+        foto_perfil: "https://media.tenor.com/Lk6mMX3yHqUAAAAd/little-witch-academia-atsuko-kagari.gif"
     })
 
     const nome_filme = localStorage.getItem('filme');
@@ -32,7 +34,7 @@ export default function Dados__filme()
 
             setDados(copiar => ({
                 ...copiar,
-                poster: infor.capa,
+                poster: `http://localhost:3000/pegar_capa_do_filme?numeros=${localStorage.getItem("filme")}&token=${localStorage.getItem("token")}`,
                 nome__filme: infor["nome"],
                 sinopse__txt: infor["sinopse"]
             }))
@@ -105,6 +107,18 @@ export default function Dados__filme()
                 ...copiar,
                 lista_comentarios: comentarios_user_p
             }))
+        })
+        
+        // Vereficar se o usuário possui alguma foto
+        fetch(`http://localhost:3000/validar__foto?email=${localStorage.getItem("email")}`).then(valida_foto => valida_foto.json()).then(valida_foto => {
+            
+            if (valida_foto === true) {
+                setDados(copiar => ({
+                    ...copiar,
+                    foto_perfil: `http://localhost:3000/pegar__foto?email=${localStorage.getItem("email")}`
+                }))
+            }
+
         })
 
     }, [])
@@ -224,7 +238,7 @@ export default function Dados__filme()
                 <div></div>
         
                 <Link className={style2.perfil_link} to="/user__config.html">
-                    <img className={style2.perfil} src="https://media.tenor.com/Lk6mMX3yHqUAAAAd/little-witch-academia-atsuko-kagari.gif" alt="Perfil"/>
+                    <img className={style2.perfil} src={dados.foto_perfil} alt="Perfil"/>
                 </Link>
             </nav>
         </div>

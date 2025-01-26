@@ -19,6 +19,7 @@ datasource db {
 model usuario_projeto_2{
   email String @unique @id
   apelido String @unique
+  foto_perfil String?
   senha String
   Estrelas estrelas_projeto_2[]
   comentarios_email comentarios_filmes_projeto_2[] @relation("email1")
@@ -40,6 +41,7 @@ model filmes_projeto_2{
   capa String
   nome String
   sinopse String
+  autorizar Boolean?
 
   estrela estrelas_projeto_2[]
   comentario comentarios_filmes_projeto_2[]

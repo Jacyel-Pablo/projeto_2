@@ -30,7 +30,9 @@ export default function Menu()
         ava1: "0",
         ava2: "0",
         ava3: "0",
-        ava4: "0"
+        ava4: "0",
+
+        foto_perfil: "https://media.tenor.com/Lk6mMX3yHqUAAAAd/little-witch-academia-atsuko-kagari.gif"
     })
 
     const [dados_campo, setDados_campo] = useState({
@@ -123,17 +125,19 @@ export default function Menu()
             fetch("http://localhost:3000/pegar_index_ultimo_filme").then(dados1 => dados1.json()).then(dados1 => {
                 for (let i = 0; i < 4; i++) {
                     fetch(`http://localhost:3000/pegar_filmes_da_tabela?numeros=${dados1[i]}&token=${localStorage.getItem("token")}`).then(tabela => tabela.json()).then(tabela => {
-            
+
                         // Vamos verificar se a algum filme na tabela antés de pegar os dados
                         if (tabela != false) {
                             fetch(`http://localhost:3000/votos?id=${dados1[i]}&token=${localStorage.getItem("token")}`).then(dados2 => dados2.json()).then(dados2 => {
                                 setDados(copiar => ({
                                     ...copiar,
-                                    ['imagem' + (4 - i).toString()]: tabela.capa,
+                                    ['imagem' + (4 - i).toString()]: `http://localhost:3000/pegar_capa_do_filme?numeros=${dados1[i]}&token=${localStorage.getItem("token")}`,
+                                        
                                     ['id' + (4 - i).toString()]: dados1[i],
                                     ['nome' + (4 - i).toString()]: tabela.nome,
                                     ['ava' + (4 - i).toString()]: dados2
                                 }))
+
                             })
                         }
                     })
@@ -146,6 +150,20 @@ export default function Menu()
     useEffect(() => {
         default_filmes()
     }, [dados])
+
+    useEffect(() => {
+        // Verificar ser existe alguma foto de perfil no banco de dados
+        fetch(`http://localhost:3000/validar__foto?email=${localStorage.getItem("email")}`).then(valida_foto => valida_foto.json()).then(valida_foto => {
+
+            if (valida_foto === true) {
+                setDados(copiar => ({
+                    ...copiar,
+                    foto_perfil: `http://localhost:3000/pegar__foto?email=${localStorage.getItem("email")}`
+                }))
+            }
+
+        })
+    }, [])
 
     // Salvar o filme no localstorage
     function salvar_filme(e)
@@ -181,7 +199,7 @@ export default function Menu()
                 }))} value={dados_campo.campo}/>
         
                 <Link className={style2.perfil_link} to="/user__config.html">
-                    <img className={style2.perfil} src="https://media.tenor.com/Lk6mMX3yHqUAAAAd/little-witch-academia-atsuko-kagari.gif" alt="Perfil"/>
+                    <img className={style2.perfil} src={dados.foto_perfil} alt="Perfil"/>
                 </Link>
             </nav>
         </div>

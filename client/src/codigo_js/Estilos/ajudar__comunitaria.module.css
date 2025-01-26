@@ -3,10 +3,20 @@
     align-content: center;
 }
 .formulario{
-    height: 80%;
+    height: 90%;
     width: 40%;
     border: 2px solid;
     margin: 0 auto;
+}
+.capa{
+    margin-left: 3%;
+}
+.box__pre__visualizar{
+    text-align: center;
+}
+.pre__visualizar{
+    height: 175px;
+    width: 125px;
 }
 .textos{
     font-size: 120%;
