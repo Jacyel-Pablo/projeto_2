@@ -92,17 +92,21 @@ export default function User__config()
     // adicionar os filmes Lista de Favoritos e o nome do usúario
     function favoritos()
     {
-        fetch(`http://localhost:3000/lista?email=${localStorage.getItem("email")}&token=${localStorage.getItem("token")}`).then(infor => infor.json())
+        fetch(`http://localhost:3000/lista?email=${localStorage.getItem("email")}`, {
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+            }
+        }).then(infor => infor.json())
         .then(infor => {
-
             var filmes_list = []
+
             for (let i = 0; i < infor.length; i++) {
                 filmes_list.push(
 
                     <a key={infor[i][0].id_filmes} className={style.love__link} href="dados__filme.html">
                         <div className={`${style.caixa__favoritos} ${style.bio__txt}`} style={{backgroundColor: "white"}}>
                             <div className={style.container1}>
-                                <img className={style.capa} src={infor[i][0].capa} alt="capa do filme"/>
+                                <img className={style.capa} src={`http://localhost:3000/pegar__imagem__filmes?capa=${infor[i][0].capa}`} alt="capa do filme"/>
                             </div>
 
                             <h3 className={style.nome__filme}>{infor[i][0].nome}</h3>

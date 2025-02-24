@@ -55,10 +55,18 @@ export default function Dados__filme()
             })
 
             fetch(`http://localhost:3000/votos?id=${nome_filme}&token=${localStorage.getItem("token")}`).then(dados2 => dados2.json()).then(dados2 => {
-                setDados(copiar => ({
-                    ...copiar,
-                    avalia: dados2
-                }))
+                if (dados2 == false) {
+                    setDados(copiar => ({
+                        ...copiar,
+                        avalia: 0
+                    }))
+
+                } else {
+                    setDados(copiar => ({
+                        ...copiar,
+                        avalia: dados2
+                    }))
+                }
             })
         });
     }

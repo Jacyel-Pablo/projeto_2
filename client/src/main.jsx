@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,8 +9,10 @@ import Dados__filme from './codigo_js/Pagínas/dados__filme.jsx';
 import User__config from './codigo_js/Pagínas/user__config.jsx';
 import Ajudar from './codigo_js/Pagínas/ajudar__comunitaria.jsx';
 import Pagina_arquivo_nao_encontrado from './codigo_js/Pagínas/pagina_arquivo_nao_encontrado.jsx';
+import jsonfile from 'jsonfile';
 import { useState } from 'react';
 import './index.css'
+import { use } from 'react';
 
 const map_pag = {
   "/menu.html": <Menu/>,
@@ -23,6 +25,16 @@ function Validacao()
 {  
   // por padrão o useState começa com uma tela preta
   const [pag, setPag] = useState(<div className="tela_preta"></div>)
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    jsonfile.readFile("C:/Users/jacye/OneDrive/Escritorio/projeto_2/client/src/config__tests.json", (e, json) => {
+      setConfig(json)
+      console.log(json)
+    })
+  }, [])
+
+  // Para fazer os testes comente a da linha 42 até a 49
 
   // Validando o token se o token for positivo ele pegar a 
   // url e colocar no mapeamento das pagínas
@@ -37,6 +49,10 @@ function Validacao()
   })
 
   // Retorna a pag do useState
+
+  // Para fazer os testes comente a linha abaixo
+  // return map_pag[window.location.pathname]
+
   return pag
 }
 

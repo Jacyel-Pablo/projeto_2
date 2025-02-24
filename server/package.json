@@ -10,9 +10,11 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.16",
     "prisma": "^5.22.0",
+    "supertest": "^7.0.0",
     "zod": "^3.23.8"
   },
   "scripts": {
+    "teste": "node --test ./config/tests.test.js",
     "server": "node --watch ./config/server_paginas.js"
   }
 }

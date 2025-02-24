@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-import express, { response } from "express"
+import express, { query, response } from "express"
 import cors from "cors"
 import bcrypt from "bcrypt"
 import dotenv from "dotenv"
@@ -29,7 +29,7 @@ const prisma = new PrismaClient()
 app.post("/submit",
     validate(
         z.object({
-            query : z.object({
+            body: z.object({
                 email: z.string().email().min(5),
                 apelido: z.string().min(5),
                 senha: z.string().min(2)
@@ -38,9 +38,9 @@ app.post("/submit",
     )
 
 , async (request, response) => {
-    const email = request.query.email
-    const apelido = request.query.apelido
-    const senha = await bcrypt.hash(request.query.senha, Number(process.env.PULO))
+    const email = request.body.email
+    const apelido = request.body.apelido
+    const senha = await bcrypt.hash(request.body.senha, Number(process.env.PULO))
 
     async function main() {
         try{
@@ -55,9 +55,11 @@ app.post("/submit",
             send_email(email, "Criação da conta ShowTime", "Sua conta foi criada com sucesso", `<h1>Sua conta foi criada com sucesso</h1>
                                                                                                 <button style=""background-color": "red";><a style="text-decoration": "none"; "color": "white"" href="http://localhost:5173">Faça login</a></button>`)
 
+            response.status(201).send(true)
+
         } catch (e) {
             console.log(e)
-            alert("Não foi possivel criar sua conta\nTente novamente mas tarde")
+            response.status(404).send(false)
         }
     }
 
@@ -72,7 +74,7 @@ app.post("/submit",
 })
 
 // Validar login e senha
-app.get("/valida", 
+app.get("/valida",
     validate(
         z.object({
             query : z.object({
@@ -82,7 +84,7 @@ app.get("/valida",
         })
     )
 
-, async (request, response) => { 
+, async (request, response) => {
     const senha_user = request.query.senha
 
     async function main()
@@ -99,13 +101,14 @@ app.get("/valida",
 
                 send_email(request.query.email, "Acesso a sua conta do ShowTime", "Olá detectamos um acesso a sua conta do ShowTime", "<h1>Olá detectamos um acesso a sua conta do ShowTime</h1>")
 
-                response.send(dados)
+                response.status(200).send(dados)
+
             } else {
-                response.send(false)
+                response.status(404).send(false)
             }
         } catch(e) {
             console.log(e)
-            response.send(false)
+            response.status(404).send(false)
         }
     }
 
@@ -120,14 +123,23 @@ app.get("/valida",
 
 // Validação do token de login
 
-app.get(("/validar_token"), (request, response) => {
+app.get(("/validar_token"),
+    validate(
+        z.object({
+            query: z.object({
+                token: z.string().min(10)
+            })
+        })
+    )
+    
+, (request, response) => {
     const token = request.query.token
 
     try {
-        response.send(valida_token(token))
+        response.status(200).send(valida_token(token))
 
     } catch(e) {
-        response.send(false)
+        response.status(404).send(false)
     }
 })
 
@@ -462,7 +474,7 @@ app.get("/alterar_nome", validate(
 // Função adicionar os filmes na lista de favorios
 
 app.get("/lista", (request, response) => {
-    const token = request.query.token
+    const token = request.headers.authorization
     const email = request.query.email
 
     async function main()
@@ -489,15 +501,15 @@ app.get("/lista", (request, response) => {
                     lista_filmes.push(dados)
                 }
         
-                response.send(lista_filmes)
+                response.status(200).send(lista_filmes)
     
             } catch (e) {
                 console.log(e)
-                response.send([])
+                response.status(404).send([])
             }
 
         } else {
-            response.send([])
+            response.status(404).send([])
         }
     }
 
@@ -507,6 +519,17 @@ app.get("/lista", (request, response) => {
         await prisma.$disconnect()
         process.exit(1)
     })
+})
+
+app.get("/pegar__imagem__filmes", ( request, response ) => {
+    const capa = request.query.capa
+    try{
+        response.status(200).sendFile(capa)
+
+    } catch (e) {
+        console.log(e)
+        response.status(404)
+    }
 })
 
 // Sistema de comentarios
@@ -595,3 +618,5 @@ app.get("/lista_comentarios", (request, response) => {
 // })
 
 app.listen(3000, console.log("O Servido está online"))
+
+export default app

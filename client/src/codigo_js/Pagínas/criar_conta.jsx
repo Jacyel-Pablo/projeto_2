@@ -21,8 +21,12 @@ export default function Criar_conta()
     {
         e.preventDefault()
         window.location.href = "/"
-        await fetch(`http://localhost:3000/submit?tabela=usuario&email=${dados.email}&apelido=${dados.apelido}&senha=${dados.senha}`, {
-            method: "POST"
+        await fetch(`http://localhost:3000/submit`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dados)
         })
     }
 

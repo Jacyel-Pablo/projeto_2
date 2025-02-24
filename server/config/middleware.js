@@ -29,7 +29,7 @@ function criar_token(json)
 function valida_token(token)
 {
     try {
-        jwt.verify(token, process.env.CHAVE).email
+        jwt.verify(token, process.env.CHAVE)
         return true
 
     } catch(e) {
@@ -42,13 +42,14 @@ function validate(esquema)
     return (request, response, next) => {
         try{
             esquema.parse({
-                query: request.query
+                query: request.query,
+                body: request.body
             })
 
             next()
 
         } catch (e) {
-            response.send(false)
+            response.status(404).send(false)
         }
     }
 }

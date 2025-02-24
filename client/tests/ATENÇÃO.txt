@@ -1,0 +1,1 @@
+antes de fazer os teste vá para client\src\main.jsx e siga os comentarios de lá
